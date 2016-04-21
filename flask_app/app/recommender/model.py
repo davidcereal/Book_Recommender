@@ -56,4 +56,44 @@ class preprocessing(object):
 	    ## Transform back to vector with results
 	    filled_ratings = ipca_model.inverse_transform(ipca_result)[0]
 	    return filled_ratings
+
+	def create_user_authors_list(id_list, book_data):
+		"""
+		Creates a list of the authors of the books input by the user.
+		Args:
+		id_list: List of the book ids of the books input 
+		book_data: Full book data
+		"""
+	    user_authors_list = []
+	    for book_id in id_list:
+	        if book_data.has_key(book_id):
+	            author = book_data[book_id]['author']
+	            user_authors_list.append(author)
+	    return user_authors_list
+
+	def return_top_n_books(filled_ratings, n_results, book_names, book_data, read_authors_list):
+	    """
+	    Return the top n number of books from the ipca model results.
+
+	    Args:
+	    filled_ratings: The end-user vector with all book ratings predicted
+	    n_results: The number of results to return (most strong predictions delivered first)
+	    book_names: The names of the books, in order of vector columns.
+	    book_data: Full book data
+
+
+		Returns:
+		top_n_book_ids: A list of the ids of the top book suggestions    
+		"""
+	    ## Attach book names to the results
+	    results = sorted(zip(book_names, filled_user_ratings), key = lambda x: x[1], reverse=True)
+	    top_n_book_ids = []
+	    for item in results[:n]:
+	        book_id = item[0]
+	        if book_data.has_key(book_id):
+	            if book_data[book_id].has_key('author'):
+	            	if book_data[book_id]['author'] not in read_authors_list:
+	                	top_n_book_ids.append(book_id)
+	    return top_n_book_ids
+
 		
