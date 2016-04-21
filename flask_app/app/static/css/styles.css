@@ -1,0 +1,19 @@
+.search_result_cover {
+	max-height: 150px;
+
+}
+
+.library_book_cover {
+	max-height: 125px;
+
+}
+
+.clear_rating {
+	font-size: 12;
+	font-weight: normal
+}
+
+.bookResult {
+	padding-bottom: 30px;
+}
+

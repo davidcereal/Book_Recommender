@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row align-center">
+  <div class="login-box">
+    <form method="POST" action="">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      <div class="row align-center">
+      {{form.email(placeholder="login")}}
+       </div>
+      <div class="row align-center">
+      {{form.password(placeholder="password")}}
+      </div>
+      <div class="row align-left">
+      {{form.submit_login(class="expanded button")}}
+      </div>
+      <div class="row align-center">
+          {{form.register(class="expanded alert button")}}
+      </div>
+    </form>
+</div>
+</div>
+
+
+
+
+{% endblock %}
+

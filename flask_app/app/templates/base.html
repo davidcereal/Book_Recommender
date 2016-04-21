@@ -1,0 +1,52 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextRead</title>
+    <link rel="stylesheet" href="/static/css/foundation.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/style.min.css">
+    <link rel="stylesheet" href="/static/css/rating.min.css">
+  </head>
+  
+  <body>
+
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+  <div class="large-12 columns">
+        <h1>NextRead</h1>
+      </div>
+    <ul class="menu">
+      <li><a href="{{ url_for('main.library') }}">My Library</a></li>
+      <li><a href="{{ url_for('main.search') }}">Add Books</a></li>
+      <li><a href="#">Recommendations</a></li>
+      <li><a href="#">About</a></li>
+
+
+      {% if current_user.is_authenticated %}
+      <li><a href="{{ url_for('auth.logout') }}">Sign Out</a></li> 
+      {% else %}
+      <li><a href="{{ url_for('auth.login') }}">Sign In</a></li> 
+      {% endif %}
+    </ul>
+
+{% block content %}
+{% endblock %}
+
+
+    <script src="../static/js/vendor/jquery.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="../static/js/vendor/what-input.js"></script>
+    <script src="../static/js/vendor/foundation.js"></script>
+    <script src="../static/js/app.js"></script>
+
+
+
+
+
+    
+  </body>
+</html>

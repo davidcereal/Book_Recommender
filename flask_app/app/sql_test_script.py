@@ -1,0 +1,18 @@
+from app import db
+db.create_all()
+test_1 = User(email='dberger1989@gmail.com', first_name='test_1')
+hp = Book(title='harry_potter', author='JKR')
+db.session.add(test_1)
+db.session.commit()
+db.session.add(hp)
+db.session.commit()
+hp_read = Read(rating=4, book=hp, user=test_1)
+db.session.add(hp_read)
+db.session.commit()
+print test_1.books_read[0].book.title
+adventure_keyword = Keyword(keyword_label='adventure')
+db.session.add(adventure_keyword)
+db.session.commit()
+hp_adventure_keyword = Book_Keyword(keyword_weight=5, book=hp, keyword=adventure_keyword)
+db.session.add(hp_adventure_keyword)
+db.session.commit()

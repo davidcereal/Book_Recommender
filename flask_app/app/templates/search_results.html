@@ -1,0 +1,154 @@
+{% extends "search.html" %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+{{ super() }}
+  
+  <div class="row" style="padding-bottom: 30px; padding-top: 30px">
+  	<h3>Search results for "{{ query }}":</h3>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+   </div>
+
+ <div id="books">
+  {% set n = 0 %}
+  {% for book in results %}	
+  {% set n = n+1 %}
+  {% if db.session.query(Read).filter_by(book_id=book.id, user_id=current_user.id).first() %}
+  {% set current_rating = db.session.query(Read).filter_by(book_id=book.id, user_id=current_user.id).first().rating %}
+  {% else %}
+  {% set current_rating = 0 %}
+  {% endif %}
+  	{% with author=book.author, title=book.title, web_id=book.web_id, n=n, current_rating=current_rating, book_id=book.id %}
+      {% include 'book_result.html' %} 
+  	{% endwith %}
+ 	{% endfor %}
+ </div>
+
+<script src="../static/js/vendor/rating.min.js"></script>
+<script src="../static/js/vendor/rating_script.js"></script>
+
+<script>
+
+function deleteReadRecord(book_id){
+      $.ajaxSetup({
+            headers:
+            { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+        });
+
+       $.ajax({
+
+         type: "POST",
+         contentType: "application/json; charset=utf-8",
+         url: "{{ url_for('main.delete_read') }}",
+         dataType: "json",
+         async: true,
+         data: JSON.stringify({"book_info": [book_id]}),   
+         success: function (data) {
+         console.log('successfully deleted:');
+          console.log(data);
+         },
+         error: function (result) {
+         console.log('you messed up')
+         }
+       })
+     }
+
+
+(function init() {
+	var lastBookDiv = document.querySelectorAll(['.c-rating']);
+	 	for (var i = 1; i < lastBookDiv.length+1; i++) {
+		 	console.log(i)
+		 	var bookElem = document.getElementById(i);
+		 	var current_rating = bookElem.querySelector('.current_rating_div').id
+		 	      var ratingElement = bookElem.querySelector('.c-rating');
+
+		 	if (current_rating != 0){ addClearRating(bookElem, ratingElement)
+
+		 	}
+	        addRatingWidget(bookElem, current_rating, ratingElement);
+      }
+})();
+
+
+    function sendBookData(rating, ratingElement, bookWebId, bookElem){
+    	$.ajaxSetup({
+            headers:
+            { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+        });
+
+    	    console.log(JSON.stringify({"rating": [[bookWebId], [rating]]}))
+       $.ajax({
+
+         type: "POST",
+         contentType: "application/json; charset=utf-8",
+         url: "{{ url_for('main.rating') }}",
+         dataType: "json",
+         async: true,
+         data: JSON.stringify({"rating": [bookWebId, rating]}),   
+         success: function (data) {
+         console.log('successfully rated:');
+          console.log(data);
+          addClearRating(bookElem, ratingElement)
+         },
+         error: function (result) {
+         console.log('you messed up')
+         }
+       })
+     }
+
+     function cearRatingClick(ratingElement, bookElem, clearRatingElem){
+                            	ratingElement.innerHTML='';
+                            	addRatingWidget(bookElem, 0)}
+                            	clearRatingElem.parentNode.removeChild(clearRatingElem)
+
+     function addClearRating(bookElem, ratingElement){    	                            
+     	var clearRatingElem = document.createElement("p")
+     	clearRatingElem.className = 'clearRatingElem';
+     	clearRatingElem.innerHTML = 'Clear Rating';
+     	var book_id = bookElem.querySelector('.book_id').id;
+     	clearRatingElem.onclick = function () {
+                            	ratingElement.innerHTML='';
+                            	addRatingWidget(bookElem, 0, ratingElement)
+                            	clearRatingElem.parentNode.removeChild(clearRatingElem)
+                            	deleteReadRecord(book_id)
+                            };
+        
+        ratingElement.parentNode.lastElementChild.appendChild(clearRatingElem)
+
+
+     }
+
+
+    // ADD RATING WIDGET
+    function addRatingWidget(bookElem, currentRating, ratingElement) {
+    	
+      console.log('function called');
+      var bookWebId = ratingElement.parentNode.id;
+      var maxRating = 5;
+      var callback = function(rating, bookWebId, ratingElement) {
+      	var ratingElement = bookElem.querySelector('.c-rating')
+      	var bookWebId = ratingElement.parentNode.id;
+      	sendBookData(rating, ratingElement, bookWebId, bookElem)
+      	 }
+      var r = rating(ratingElement, currentRating, maxRating, callback);  
+    }
+</script>
+ 
+{% endblock %}
+
+
+
+
+
+
+{% block scripts %}
+{{ super() }}
+<script src="../static/js/vendor/rating.min.js"></script>
+<script src="../static/js/rating_script.js"></script>
+
+
+
+{% endblock %}

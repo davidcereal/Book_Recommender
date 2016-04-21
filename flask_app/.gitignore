@@ -1,0 +1,16 @@
+*.sql
+*.sqlite
+.DS_Store
+.DS_Store?
+*.pyc
+/Users/David/iCloud/ds/Book_Recommender/old_site/
+/Users/David/iCloud/ds/Book_Recommender/old_site/
+/Users/David/iCloud/ds/Book_Recommender/old_site/*
+/Users/David/iCloud/ds/Book_Recommender/flask_app/whoosh_index
+/Users/David/iCloud/ds/Book_Recommender/flask_app/whoosh_index/*
+/Users/David/iCloud/ds/Book_Recommender/flask_app/whoosh_index_test
+/Users/David/iCloud/ds/Book_Recommender/flask_app/whoosh_index_test/*
+Users/David/iCloud/ds/Book_Recommender/flask_app/whoosh_index
+Users/David/iCloud/ds/Book_Recommender/flask_app/whoosh_index/*
+Users/David/iCloud/ds/Book_Recommender/flask_app/whoosh_index_test
+Users/David/iCloud/ds/Book_Recommender/flask_app/whoosh_index_test/*

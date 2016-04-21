@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+
+
+
+  <link rel="stylesheet" href="rating.css">
+
+
+
+</head>
+<body>
+
+
+
+<div id="el"></div>
+
+
+
+<script src="rating.js"></script>
+<script>
+  // target element
+var el = document.querySelector('#el');
+
+// current rating, or initial rating
+var currentRating = 2;
+
+// max rating, i.e. number of stars you want
+var maxRating= 5;
+
+// callback to run after setting the rating
+var callback = function(rating) { alert(rating); };
+
+// rating instance
+var myRating = rating(el, currentRating, maxRating, callback);
+</script>
+</body>
+</html>

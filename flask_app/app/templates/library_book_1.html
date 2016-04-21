@@ -1,0 +1,34 @@
+{% block content %}
+
+
+<div class="shrink columns">
+	<div class="row" >
+		<div class="small-2 columns", id={{web_id}}>
+			<img class="library_book_cover" src="/static/book_covers/{{ web_id }}.jpg"/>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="small-2 columns">
+			<h6>{{ title }}</h6>
+		</div>
+	</div>
+		
+	<div class="row" id="{{ n }}">
+		<div class="shrink columns">
+			<h6 class="subheader">{{ author }}</h6>
+		</div>
+				
+		<div class="shrink columns" id = {{web_id}}>
+	 		<div class="c-rating" id='c-rating' tag={{web_id}}>
+			</div>
+		<div class="shrink columns" id=clearRating>
+		</div>
+
+		</div>
+	</div>
+	</div>
+
+
+
+{% endblock %}
