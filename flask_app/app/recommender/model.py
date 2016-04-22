@@ -7,13 +7,17 @@ class User_rec(object):
 class preprocessing(object):
 	def __init__(self, user):
 		self.user = user
-	
-	def prepare_ratings_for_dv(book_ids):
+
+	#------------------------------Collaborative Filtering--------------------------#
+
+	def prepare_ratings_for_dv(book_ids, db):
 	    """
-	    Function to place ratings and book ids into format for the dict vectorizer.
+	    Function to query the database for the ratings the user attributed to the books
+	    submitted. Then place ratings and book ids into format for the dict vectorizer.
 
 	    Args:
 	    book_ids (list of ints): A list containing the ids of the books the end-user has selected.
+	    db: Database of users, books, and ratings. 
 	    
 	    Returns:
 	    ratings_list (list of dicts): A list containing dictionaries where each dict is in the format book_id:rating. 
@@ -26,7 +30,7 @@ class preprocessing(object):
 	    rating_list.append(ratings_dict)
 	    return rating_list
 
-	def transform_user_point(dict_vectorizer_fit, ratings_list):
+	def dv_transform_enduser_vector(dict_vectorizer_fit, ratings_list):
 	    """
 	    Use Dict Vecotrizer object fit on full users data to transform the end-user's ratings
 	    data into vector with similar columns. 
@@ -46,7 +50,7 @@ class preprocessing(object):
 	    book_names = dict_vectorizer_fit.feature_names_
 	    return book_names, enduser_vector
 
-	def tranform_user_point_with_ipca(ipca_model, enduser_vector):
+	def ipca_tranform_enduser_vector(ipca_model, enduser_vector):
 	    """
 	    Use IPCA model fit on full user data transform 
 	    the user vector, to predict what he/she would have filled in for missing 
@@ -57,15 +61,15 @@ class preprocessing(object):
 	    filled_ratings = ipca_model.inverse_transform(ipca_result)[0]
 	    return filled_ratings
 
-	def create_user_authors_list(id_list, book_data):
+	def create_user_authors_list(book_ids, book_data):
 		"""
 		Creates a list of the authors of the books input by the user.
 		Args:
-		id_list: List of the book ids of the books input 
+		book_ids: List of the book ids from end-user input 
 		book_data: Full book data
 		"""
 	    user_authors_list = []
-	    for book_id in id_list:
+	    for book_id in book_ids:
 	        if book_data.has_key(book_id):
 	            author = book_data[book_id]['author']
 	            user_authors_list.append(author)
@@ -95,5 +99,179 @@ class preprocessing(object):
 	            	if book_data[book_id]['author'] not in read_authors_list:
 	                	top_n_book_ids.append(book_id)
 	    return top_n_book_ids
+
+
+
+	 def collaborative_filtering_predict(book_ids, book_data, db, n_books_returned):
+	 	"""
+	 	With enduser input of books and ratings, predict ratings for unread books and
+	 	return highest predicted books.
+
+	 	Args:
+	 	book_ids: A list of the books the end-user submitted
+	 	book_data: Full book library data
+	 	db: database with users, books, and ratings
+	 	n_books_returned: The number of books to be returned
+
+	 	Returns:
+	 	top_n_book_ids: The top n books the end-user is predicted to rate highest. 
+	 	"""
+
+	 	## Format end-user ratings into a list of dicts for the dict vectorizer
+		unique_user_ratings_list = prepare_ratings_for_dv(book_ids)
+
+
+	    ## Transform end-user ratings into vector fit on full user matrix 
+	    ## and store the book names for later
+	    book_names, enduser_vector = dv_transform_enduser_vector(dict_vectorizer_fit, ratings_list)
+	    
+	    ## Transform user vector and predict ratings
+	    filled_enduser_ratings = ipca_tranform_user_point(ipca_model, enduser_vector)
+	    
+	    ## Make a list of the authors of the books the end-user submitted 
+	    user_authors_list = create_user_authors_list(book_ids, book_data)
+	    
+	    ## Return the books the end-user is most likely to rate highest
+	    top_n_book_ids = return_top_n_books(filled_enduser_ratings, n_books_returned, book_names, book_data, user_authors_list)
+	    return top_n_book_ids
+
+	#-----------------------------Book Similarity Filtering-----------------------#
+	def create_book_keyword_ranking(book_ids, book_data):
+	    '''
+	    Create a dictionary with the end-user's books as keys and keyword:ranking
+	    as values.
+	    
+	    Arguments
+	    user_ids: the user's books he is basing recommendation off of
+	    
+	    Returns
+	    a dictionary of books and their keywords and rankings 
+	    
+	    '''
+	    book_keyword_ranking_dict = {}
+	    for book_id in book_ids:
+	        if book_data.has_key(book_id):
+	            keyword_rankings = book_data[book_id]['keywords']
+	            book_keyword_ranking_dict[book_id] = keyword_rankings
+	    return book_keyword_ranking_dict
+	        
+
+	def user_keyword_preferences(book_ids, book_data):
+	    
+	    '''
+	    Take a list of book ids and make a dictionary of keywords as keys and how many 
+	    times each keyword is shared between books as the value
+	    
+	    Args: a list of book ids
+	    Returns: a counter dictionary of keywords and counts
+	    '''
+	    
+	    ## Make a dictionary of the top ranked keywords for each book
+	    book_keyword_ranking_dict = create_book_keyword_ranking(book_ids, book_data)
+	    
+	    ## return a dictionary of how many times a keyword is shared between books 
+	    desired_keywords = []
+	    for book, keywords in book_keyword_ranking_dict.items():
+	        for keyword, value in keywords.items():
+	            desired_keywords.append(keyword)
+	    user_keyword_preferences = Counter(desired_keywords)
+	    return user_keyword_preferences
+
+
+
+	def make_user_ranking(keyword_preferences, features_list):
+	    '''
+	    Makes a dictionary where the keys are the most-shared keywords and the values are the rankings for them.
+	    A top ranking will also go to all the features the user specified in input
+	    
+	    Arguments
+	    keyword_preferences: a dictionary of keywords and how often they appear in the user's
+	    bookshelf
+	    features_list: a list of features the user specified
+	    
+	    Returns
+	    user_preference: a dictionary where the keys are keywords and the values are their ranking
+	    
+	    '''
+	    user_preference = {}
+	    user_preference['user'] = {}
+	    for i, keyword in enumerate(sorted(keyword_preferences.items(), key=lambda x : x[1], reverse=True)):
+	        user_preference['user'][keyword[0]] = 20 - i
+	    for feature in features_list:
+	        user_preference['user'][feature] = 20
+	    return user_preference
+
+	def make_top_books_keyword_dict(top_books, book_data):
+	    '''
+	    Turns list of top book_ids returned from ipca and creates a dictionary where:
+	    {book:{keyword:rank}}
+	    '''
+	    top_books_keyword_dict = {}
+	    for book_id in top_books:
+	        try:
+	            keywords = book_data[book_id]['keywords']
+	            top_books_keyword_dict[book_id] = keywords
+	            for key in top_books_keyword_dict[book_id].keys():
+	                top_books_keyword_dict[book_id][key] = 1
+	        except: 
+	            continue
+	    return top_books_keyword_dict
+
+	def remove_non_shared_keywords(top_books_keyword_dict, user_preference):
+	    '''
+	    Remove keywords from top_books if not shared with user_preference
+	    '''
+	    top_books_keyword_dict_1 = copy.deepcopy(top_books_keyword_dict)
+	    for book_id in top_books_keyword_dict_1:
+	        for keyword in top_books_keyword_dict_1[book_id]:
+	            if keyword not in user_preference['user'].keys():
+	                del top_books_keyword_dict[book_id][keyword]
+	    return top_books_keyword_dict
+
+	def keep_only_if_in_feature_list(top_books, features_list, book_data):
+	    '''
+	    Only keep books if they share a keyword with the keywords in the features_list
+	    '''
+	    revised_top_books = {}
+	    for book_id in top_books:
+	        for keyword in book_data[book_id]['keywords']:
+	            if keyword in features_list:
+	                revised_top_books[book_id] = book_data[book_id]['keywords']
+	    return revised_top_books
+
+
+
+
+
+	#-------------------------make dataframes for knn model---------------------------------#
+
+	def make_book_sample_and_test_point(top_n_book_ids, user_preference):
+	    """
+	    Turn the data of books and their keyword rankings and turn them into a sample, while 
+	    turning the user's preference into a point. 
+	    
+	    Arguments
+	    book_keyword_ranking_dict: dictionary of books as keys and keyword:rank as value
+	    user_preference: custom user preference based on user inmput
+	    
+	    Returns:
+	    sample: df with the books as rows and keywords as columns and counts as values
+	    point: series with keywords as columns and rank as values
+	    
+	    """
+	    
+	    df = pd.DataFrame.from_dict(top_n_book_ids, orient='index')
+	    ## Make a dataframe of the custom book dict, to be appended to the user dataframe 
+	    df_to_append = pd.DataFrame.from_dict(user_preference, orient='index') 
+
+	    ## Combine the two dataframes. 
+	    df1 = df.append(df_to_append)
+	    df2 = df1.fillna(0)
+	    books_sample = df2.ix[:-1, :]
+	    books_point = df2.ix[-1:, :]
+	    return books_sample, books_point
+
+
+
 
 		
