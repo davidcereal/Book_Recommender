@@ -135,7 +135,6 @@ class preprocessing(object):
 	    top_n_book_ids = return_top_n_books(filled_enduser_ratings, n_books_returned, book_names, book_data, user_authors_list)
 	    return top_n_book_ids
 
-<<<<<<< HEAD
 	#-----------------------------Find Keyword Preference-----------------------#
 	
 	def create_book_keyword_ranking(book_ids, book_data):
@@ -152,21 +151,6 @@ class preprocessing(object):
 	    times the are mentioned in association with the book.
 	    
 	    """
-=======
-	#-----------------------------Book Similarity Filtering-----------------------#
-	def create_book_keyword_ranking(book_ids, book_data):
-	    '''
-	    Create a dictionary with the end-user's books as keys and keyword:ranking
-	    as values.
-	    
-	    Arguments
-	    user_ids: the user's books he is basing recommendation off of
-	    
-	    Returns
-	    a dictionary of books and their keywords and rankings 
-	    
-	    '''
->>>>>>> 37eff7ef4abfdb00d6d320fc02a3bc99e613fffe
 	    book_keyword_ranking_dict = {}
 	    for book_id in book_ids:
 	        if book_data.has_key(book_id):
@@ -177,46 +161,28 @@ class preprocessing(object):
 
 	def user_keyword_preferences(book_ids, book_data):
 	    
-<<<<<<< HEAD
 	    """
-=======
-	    '''
->>>>>>> 37eff7ef4abfdb00d6d320fc02a3bc99e613fffe
 	    Take a list of book ids and make a dictionary of keywords as keys and how many 
 	    times each keyword is shared between books as the value
 	    
 	    Args: a list of book ids
 	    Returns: a counter dictionary of keywords and counts
-<<<<<<< HEAD
-	    """
-=======
-	    '''
->>>>>>> 37eff7ef4abfdb00d6d320fc02a3bc99e613fffe
-	    
+	    """    
 	    ## Make a dictionary of the top ranked keywords for each book
 	    book_keyword_ranking_dict = create_book_keyword_ranking(book_ids, book_data)
-	    
-<<<<<<< HEAD
-	    ## return a dictionary of how many times a keyword is shared between books
-	    ## This should be improved in the future with a weighting process. 
-=======
-	    ## return a dictionary of how many times a keyword is shared between books 
->>>>>>> 37eff7ef4abfdb00d6d320fc02a3bc99e613fffe
 	    desired_keywords = []
 	    for book, keywords in book_keyword_ranking_dict.items():
 	        for keyword, value in keywords.items():
 	            desired_keywords.append(keyword)
 	    user_keyword_preferences = Counter(desired_keywords)
+	    ## return a dictionary of how many times a keyword is shared between books
+	    ## This should be improved in the future with a weighting process. 
 	    return user_keyword_preferences
 
 
 
 	def make_user_ranking(keyword_preferences, features_list):
-<<<<<<< HEAD
 	    """
-=======
-	    '''
->>>>>>> 37eff7ef4abfdb00d6d320fc02a3bc99e613fffe
 	    Makes a dictionary where the keys are the most-shared keywords and the values are the rankings for them.
 	    A top ranking will also go to all the features the user specified in input
 	    
@@ -228,11 +194,7 @@ class preprocessing(object):
 	    Returns
 	    user_preference: a dictionary where the keys are keywords and the values are their ranking
 	    
-<<<<<<< HEAD
 	    """
-=======
-	    '''
->>>>>>> 37eff7ef4abfdb00d6d320fc02a3bc99e613fffe
 	    user_preference = {}
 	    user_preference['user'] = {}
 	    for i, keyword in enumerate(sorted(keyword_preferences.items(), key=lambda x : x[1], reverse=True)):
@@ -242,17 +204,10 @@ class preprocessing(object):
 	    return user_preference
 
 	def make_top_books_keyword_dict(top_books, book_data):
-<<<<<<< HEAD
 	    """
 	    Turns list of top book_ids returned from ipca and creates a dictionary where:
 	    {book:{keyword:rank}}
 	    """
-=======
-	    '''
-	    Turns list of top book_ids returned from ipca and creates a dictionary where:
-	    {book:{keyword:rank}}
-	    '''
->>>>>>> 37eff7ef4abfdb00d6d320fc02a3bc99e613fffe
 	    top_books_keyword_dict = {}
 	    for book_id in top_books:
 	        try:
@@ -265,15 +220,10 @@ class preprocessing(object):
 	    return top_books_keyword_dict
 
 	def remove_non_shared_keywords(top_books_keyword_dict, user_preference):
-<<<<<<< HEAD
 	    """
 	    Remove keywords from top_books if not shared with user_preference
 	    """
-=======
-	    '''
-	    Remove keywords from top_books if not shared with user_preference
-	    '''
->>>>>>> 37eff7ef4abfdb00d6d320fc02a3bc99e613fffe
+
 	    top_books_keyword_dict_1 = copy.deepcopy(top_books_keyword_dict)
 	    for book_id in top_books_keyword_dict_1:
 	        for keyword in top_books_keyword_dict_1[book_id]:
@@ -282,15 +232,10 @@ class preprocessing(object):
 	    return top_books_keyword_dict
 
 	def keep_only_if_in_feature_list(top_books, features_list, book_data):
-<<<<<<< HEAD
+
 	    """
 	    Only keep books if they share a keyword with the keywords in the features_list
 	    """
-=======
-	    '''
-	    Only keep books if they share a keyword with the keywords in the features_list
-	    '''
->>>>>>> 37eff7ef4abfdb00d6d320fc02a3bc99e613fffe
 	    revised_top_books = {}
 	    for book_id in top_books:
 	        for keyword in book_data[book_id]['keywords']:
@@ -298,15 +243,6 @@ class preprocessing(object):
 	                revised_top_books[book_id] = book_data[book_id]['keywords']
 	    return revised_top_books
 
-
-
-
-
-<<<<<<< HEAD
-	#-------------------------Apply Book Similarity Filtering ---------------------------------#
-=======
-	#-------------------------make dataframes for knn model---------------------------------#
->>>>>>> 37eff7ef4abfdb00d6d320fc02a3bc99e613fffe
 
 	def make_book_sample_and_test_point(top_n_book_ids, user_preference):
 	    """
@@ -330,7 +266,6 @@ class preprocessing(object):
 	    ## Combine the two dataframes. 
 	    df1 = df.append(df_to_append)
 	    df2 = df1.fillna(0)
-<<<<<<< HEAD
 	    books_df = df2.ix[:-1, :]
 	    enduser_series = df2.ix[-1:, :]
 	    return books_df, enduser_series
@@ -359,7 +294,7 @@ class preprocessing(object):
 	    user_preference = make_user_ranking(user_keyword_preferences, features_list)
 
 	    ## Make a dict of keywords for top books and n times keyword mentioned
-	    top_books_keyword_dict = dp.make_top_books_keyword_dict(top_books, book_data)
+	    top_books_keyword_dict = make_top_books_keyword_dict(top_books, book_data)
 
 	    ## Only keep those books sharing a keyword with end-users keywords
 	    if len(features_list) >= 1:
@@ -367,7 +302,7 @@ class preprocessing(object):
 
 	    ## Create dataframe of all books and their keyword rankings as columns
 	    ## Create a series of end-user's "ideal" book keyword rankings  
-	    books_df, enduser_series = dp.make_book_sample_and_test_point(top_books_keyword_dict, user_preference)
+	    books_df, enduser_series = make_book_sample_and_test_point(top_books_keyword_dict, user_preference)
 	    sample_size = len(books_df)
 
 	    ## Define clasifier
@@ -392,13 +327,9 @@ class preprocessing(object):
 	    recommended_books = [books_df.iloc[neighbor].name for neighbor in neighbors if neighbor not in books_returned]
 
 	    return recommended_books
-=======
-	    books_sample = df2.ix[:-1, :]
-	    books_point = df2.ix[-1:, :]
-	    return books_sample, books_point
 
 
->>>>>>> 37eff7ef4abfdb00d6d320fc02a3bc99e613fffe
+
 
 
 		
