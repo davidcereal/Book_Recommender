@@ -4,16 +4,22 @@
 }
 
 .library_book_cover {
-	max-height: 125px;
+	max-height: 180px;
 
 }
 
-.clear_rating {
-	font-size: 12;
-	font-weight: normal
+.removeBook {
+	font-size:80%;
+	padding-left:9px;
 }
 
 .bookResult {
 	padding-bottom: 30px;
+
 }
 
+.recLibrary {
+	height: 300px;
+	overflow:scroll;
+	
+}

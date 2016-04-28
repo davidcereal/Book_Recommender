@@ -60,8 +60,11 @@ function deleteReadRecord(book_id){
 (function init() {
 	var lastBookDiv = document.querySelectorAll(['.c-rating']);
 	 	for (var i = 1; i < lastBookDiv.length+1; i++) {
-		 	console.log(i)
-		 	var bookElem = document.getElementById(i);
+		 	      var iter = i.toString()
+      var iterId = 'iter'.concat(iter)
+      var bookElem = document.getElementById(iterId);
+      
+      var webIdElem = bookElem.querySelector('.current_rating_div');
 		 	var current_rating = bookElem.querySelector('.current_rating_div').id
 		 	      var ratingElement = bookElem.querySelector('.c-rating');
 

@@ -34,8 +34,8 @@ def create_app(config_name):
 	from .auth import auth as auth_blueprint
 	app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
-	from .recommender import recommender as recommend_blueprint
-	app.register_blueprint(recommend_blueprint )
+	from .recommender import recommender as recommender_blueprint
+	app.register_blueprint(recommender_blueprint )
 
 	return app
 

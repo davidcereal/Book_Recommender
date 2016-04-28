@@ -8,6 +8,17 @@ class preprocessing(object):
 	def __init__(self, user):
 		self.user = user
 
+	def recommend_books(book_ids, db, user, book_data, ipca_model, dict_vectorizer_fit, n_books_returned):
+		"""
+		Function to run collaborative filtering and book-keyword similarity and return recommendations
+		"""
+		## Run collaborative filtering
+		top_n_book_ids = collaborative_filtering_predict(book_ids, book_data, db, n_books_returned)
+		
+		## Run book similarity
+		recommended_books = apply_book_similarity_filtering(top_n_book_ids, book_data)
+		return recommended_books
+
 	#------------------------------Collaborative Filtering--------------------------#
 
 	def prepare_ratings_for_dv(book_ids, db):
@@ -25,7 +36,7 @@ class preprocessing(object):
 	    ratings_list = []
 	    rating_dict= {}
 	    for book_id in book_ids:
-	    	rating = db.session.query(Read).filter_by(user_id=g.user.id, book_id=book_id).first()
+	    	rating = db.session.query(Read).filter_by(user_id=user.id, book_id=book_id).first()
 	        rating_dict[book_id] = rating
 	    rating_list.append(ratings_dict)
 	    return rating_list
@@ -174,10 +185,10 @@ class preprocessing(object):
 	    for book, keywords in book_keyword_ranking_dict.items():
 	        for keyword, value in keywords.items():
 	            desired_keywords.append(keyword)
-	    user_keyword_preferences = Counter(desired_keywords)
+	    keyword_preferences = Counter(desired_keywords)
 	    ## return a dictionary of how many times a keyword is shared between books
 	    ## This should be improved in the future with a weighting process. 
-	    return user_keyword_preferences
+	    return keyword_preferences
 
 
 
@@ -314,7 +325,6 @@ class preprocessing(object):
 	    ## Determine distance from neighbors
 	    book_nearest_neighbors = book_neigh.kneighbors(enduser_series, return_distance=True)
 	    
-
 	    ## Put neighbors in list
 	    neighbors = np.ndarray.tolist(book_nearest_neighbors[1])[0]
 

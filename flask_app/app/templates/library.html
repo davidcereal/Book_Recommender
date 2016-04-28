@@ -30,8 +30,10 @@
 	var lastBookDiv = document.querySelectorAll(['.c-rating']);
 	 	for (var i = 1; i < lastBookDiv.length+1; i++) {
 		 	console.log('list item number:')
-      console.log(i)
-		 	var bookElem = document.getElementById(i);
+      var iter = i.toString()
+      var iterId = 'iter'.concat(iter)
+		 	var bookElem = document.getElementById(iterId);
+      
       var webIdElem = bookElem.querySelector('.current_rating_div');
       current_rating = webIdElem.id 
 	    addRatingWidget(bookElem, current_rating);

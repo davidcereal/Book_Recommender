@@ -8,7 +8,7 @@
   	<h4>Let's find your next book!</h4>
 <meta name="csrf-token" content="{{ csrf_token() }}">
    </div>
-<div class=row style='box-shadow: inset 0 0 12px 1px lightgray; height: 300px;overflow:scroll; padding: 10px'>
+<div class=row style='box-shadow: inset 0 0 12px 7px lightgray; height: 400px;overflow:scroll; padding: 15px'>
 <div class=row>
   {% set n = 0 %}
   {% for book_read in current_user.books_read %}	
@@ -32,8 +32,9 @@
 	var lastBookDiv = document.querySelectorAll(['.c-rating']);
 	 	for (var i = 1; i < lastBookDiv.length+1; i++) {
 		 	console.log('list item number:')
-      console.log(i)
-		 	var bookElem = document.getElementById(i);
+      var iter = i.toString()
+      var iterId = 'iter'.concat(iter)
+      var bookElem = document.getElementById(iterId);   
       var webIdElem = bookElem.querySelector('.current_rating_div');
       current_rating = webIdElem.id 
 	    addRatingWidget(bookElem, current_rating);
