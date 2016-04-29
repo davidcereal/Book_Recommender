@@ -94,9 +94,11 @@ function deleteReadRecord(book_id){
 function removeBook(book_info){
   var book_id = book_info[0]
   var i = book_info[1]
-  var wholeBookElem = document.getElementById(i)
+  var iter = i.toString()
+  var iterId = 'iter'.concat(iter)
+  var BookElem = document.getElementById(iterId)
   deleteReadRecord(book_id)
-  wholeBookElem.parentNode.removeChild(wholeBookElem)
+  BookElem.parentNode.removeChild(BookElem)
 
 
 

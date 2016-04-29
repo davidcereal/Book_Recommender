@@ -11,11 +11,19 @@
 .removeBook {
 	font-size:80%;
 	padding-left:9px;
+	cursor:pointer;
 }
 
 .bookResult {
 	padding-bottom: 30px;
+	cursor: pointer;
+	max-height: 180px;
 
+}
+
+.recCover{
+	cursor:pointer;
+	max-height:210;
 }
 
 .recLibrary {
@@ -23,3 +31,22 @@
 	overflow:scroll;
 	
 }
+
+
+.recCover:hover{
+
+ -webkit-box-shadow: 0px 0px 10px 2px #28aadc;
+-moz-box-shadow:    0px 0px 10px 2px #28aadc;
+box-shadow:         0px 0px 10px 2px #28aadc;
+}
+.recCover:last-of-type:hover{
+ -webkit-box-shadow: 0px 0px 10px 2px #28aadc;
+-moz-box-shadow:    0px 0px 10px 2px #28aadc;
+box-shadow:         0px 0px 10px 2px #28aadc;
+}
+
+.recCover.HL{
+	outline: solid 7px #28aadc
+}
+
+

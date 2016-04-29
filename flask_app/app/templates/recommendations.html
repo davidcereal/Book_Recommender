@@ -21,11 +21,19 @@
  </div>
  </div>
 
-
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="../static/js/vendor/rating.min.js"></script>
 <script src="../static/js/vendor/rating_script.js"></script>
 
 <script>
+
+
+$(document).ready(function ()  {
+    $(".recCover").click(function() {
+      $(this).toggleClass("HL");  
+    });
+  });
+
 
 
 (function init() {
@@ -95,9 +103,11 @@ function deleteReadRecord(book_id){
 function removeBook(book_info){
   var book_id = book_info[0]
   var i = book_info[1]
-  var wholeBookElem = document.getElementById(i)
+  var iter = i.toString()
+  var iterId = 'iter'.concat(iter)
+  var BookElem = document.getElementById(iterId)
   deleteReadRecord(book_id)
-  wholeBookElem.parentNode.removeChild(wholeBookElem)
+  BookElem.parentNode.removeChild(BookElem)
 
 
 
@@ -112,9 +122,7 @@ function removeBook(book_info){
      	var clearRatingElem = document.createElement("p")
      	clearRatingElem.className = 'clearRatingElem';
      	clearRatingElem.innerHTML = 'Clear Rating';
-      alert(bookElem);
       book_id = bookElem.querySelector('.book_id').id;
-      alert(bookElem);
       console.log(book_id);
      	clearRatingElem.onclick = function () {
                             	ratingElement.innerHTML='';

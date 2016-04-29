@@ -2,9 +2,9 @@
 
 
 <div class="small-2 columns" id="{{ 'iter' + n|string }}">
-	<img class="library_book_cover" src="/static/book_covers/3.jpg"/>
+	<img class="recCover" src="/static/book_covers/3.jpg"/>
 	<div class =current_rating_div id={{ current_rating }}></div>
-	<div class="c-rating" id='c-rating'></div>
+	<div class="c-rating" id='c-rating' style='padding-top:5px'></div>
 	<p class=removeBook onclick=removeBook([{{book_id}},{{n}}])>Remove from Library</p>
 	</div>
 
