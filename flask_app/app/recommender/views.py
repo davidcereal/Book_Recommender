@@ -5,6 +5,7 @@ from ..models import User, Book, Read
 from config import Config
 from flask.ext.login import login_required, current_user
 from flask_wtf.csrf import CsrfProtect
+from recommend import Recommend
 
 '''with open('engineered_book_data.pkl', 'r') as picklefile:
     book_data = pickle.load(picklefile)
@@ -23,15 +24,19 @@ def before_request():
 @recommender.route('/recommendations', methods=['GET', 'POST']) 
 @login_required
 def recommendations():
-	return render_template('recommendations.html', current_user=g.user, db=db, Book=Book)
+    return render_template('recommendations.html', current_user=g.user, db=db, Book=Book)
 
 @recommender.route('/recommendations/results', methods=['GET', 'POST']) 
 @login_required
 def results():
-	g.Recommend = Recommend(user=g.user, db=db, Read=Read, books_selected=books_selected)
-	g.recommended_books = g.Recommend.recommend_books(book_ids=books_selected, book_data=book_data, 
-						ipca_model=ipca_model, dict_vectorizer_fit=dict_vectorizer_fit, 
-						n_collab_returned=1000)
-	return recommended_books
+    print 'worked!'
+    data = request.json
+    books_selected = data['books_selected']
+    g.Recommend = Recommend(user=g.user, db=db, Read=Read, books_selected=books_selected)
+    g.recommended_books = g.Recommend.recommend_books(book_ids=books_selected, book_data=book_data, 
+                        ipca_model=ipca_model, dict_vectorizer_fit=dict_vectorizer_fit, 
+                        n_collab_returned=1000)
+    rec_data = {"recommendations": g.recommended_books}
+    return jsonify(rec_data)
 
-		 
+         

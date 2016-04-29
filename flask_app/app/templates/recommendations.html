@@ -129,19 +129,17 @@
 $(document).ready(function ()  {
     $(".recCover").click(function() {
       $(this).toggleClass("HL");
-      alert(this.id)
       var webId = this.id
       if (this.className.substring(9) == "HL"){
-        alert("Click")
         bookSelections.push(webId)
+        recommendBooks(bookSelections)
       
       }
       else {
-        alert("UnClick")
         var index = bookSelections.indexOf(webId)
         bookSelections.splice(index, 1);
+        recommendBooks(bookSelections)
       }   
-      alert(bookSelections)
     });
   });
 
@@ -210,6 +208,31 @@ function deleteReadRecord(book_id){
          }
        })
      }
+
+function recommendBooks(bookSelections){
+      $.ajaxSetup({
+            headers:
+            { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+        });
+
+       $.ajax({
+
+         type: "POST",
+         contentType: "application/json; charset=utf-8",
+         url: "{{ url_for('recommender.results') }}",
+         dataType: "json",
+         async: true,
+         data: JSON.stringify({"books_selected": bookSelections}),   
+         success: function (data) {
+         console.log('successfully deleted:');
+          console.log(data);
+         },
+         error: function (result) {
+         console.log('you messed up')
+         }
+       })
+     }
+
 
 function removeBook(book_info){
   var book_id = book_info[0]
