@@ -6,15 +6,10 @@ from config import Config
 from flask.ext.login import login_required, current_user
 from flask_wtf.csrf import CsrfProtect
 from recommend import Recommend
+import recommendation_data
+from recommendation_data import book_data, dict_vectorizer_fit, ipca_model
 
-'''with open('engineered_book_data.pkl', 'r') as picklefile:
-    book_data = pickle.load(picklefile)
 
-with open('DV_fit.pkl', 'r') as picklefile:
-    dict_vectorizer_fit = pickle.load(picklefile)
-
-with open('ipca_model.pkl', 'r') as picklefile:
-    ipca_model = pickle.load(picklefile)'''
 
 @recommender.before_request
 def before_request():
@@ -32,10 +27,9 @@ def results():
     print 'worked!'
     data = request.json
     books_selected = data['books_selected']
-    g.Recommend = Recommend(user=g.user, db=db, Read=Read, books_selected=books_selected)
-    g.recommended_books = g.Recommend.recommend_books(book_ids=books_selected, book_data=book_data, 
-                        ipca_model=ipca_model, dict_vectorizer_fit=dict_vectorizer_fit, 
-                        n_collab_returned=1000)
+    g.Recommend = Recommend(user=g.user, db=db, Read=Read, books_selected=books_selected, 
+                    book_data=book_data, ipca_model=ipca_model, dict_vectorizer_fit=dict_vectorizer_fit)
+    g.recommended_books = g.Recommend.recommend_books(n_collab_returned=1000)
     rec_data = {"recommendations": g.recommended_books}
     return jsonify(rec_data)
 
