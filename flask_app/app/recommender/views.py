@@ -20,7 +20,6 @@ def before_request():
     g.user = current_user
 
 
-
 @recommender.route('/recommendations', methods=['GET', 'POST']) 
 @login_required
 def recommendations():
@@ -29,7 +28,7 @@ def recommendations():
 @recommender.route('/recommendations/results', methods=['GET', 'POST']) 
 @login_required
 def results():
-	g.Recommend = Recommend(db=db, Read=Read, books_selected=books_selected)
+	g.Recommend = Recommend(user=g.user, db=db, Read=Read, books_selected=books_selected)
 	g.recommended_books = g.Recommend.recommend_books(book_ids=books_selected, book_data=book_data, 
 						ipca_model=ipca_model, dict_vectorizer_fit=dict_vectorizer_fit, 
 						n_collab_returned=1000)

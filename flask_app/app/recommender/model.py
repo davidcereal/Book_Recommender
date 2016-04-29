@@ -4,16 +4,17 @@ class User_rec(object):
 
 
 
-class preprocessing(object):
-	def __init__(self, user):
+class Recommend(object):
+	def __init__(self, user, Read, books_selected):
 		self.user = user
+		self.book_ids = books_selected
 
-	def recommend_books(book_ids, db, user, book_data, ipca_model, dict_vectorizer_fit, n_books_returned):
+	def recommend_books(book_ids, db, user, book_data, ipca_model, dict_vectorizer_fit, n_collab_returned):
 		"""
 		Function to run collaborative filtering and book-keyword similarity and return recommendations
 		"""
 		## Run collaborative filtering
-		top_n_book_ids = collaborative_filtering_predict(book_ids, book_data, db, n_books_returned)
+		top_n_book_ids = collaborative_filtering_predict(book_ids, book_data, db, n_collab_returned)
 		
 		## Run book similarity
 		recommended_books = apply_book_similarity_filtering(top_n_book_ids, book_data)
@@ -21,7 +22,7 @@ class preprocessing(object):
 
 	#------------------------------Collaborative Filtering--------------------------#
 
-	def prepare_ratings_for_dv(book_ids, db):
+	def prepare_ratings_for_dv(book_ids, db, Read):
 	    """
 	    Function to query the database for the ratings the user attributed to the books
 	    submitted. Then place ratings and book ids into format for the dict vectorizer.
@@ -113,7 +114,7 @@ class preprocessing(object):
 
 
 
-	 def collaborative_filtering_predict(book_ids, book_data, db, n_books_returned):
+	 def collaborative_filtering_predict(book_ids, book_data, db, n_collab_returned):
 	 	"""
 	 	With enduser input of books and ratings, predict ratings for unread books and
 	 	return highest predicted books.
@@ -122,7 +123,7 @@ class preprocessing(object):
 	 	book_ids: A list of the books the end-user submitted
 	 	book_data: Full book library data
 	 	db: database with users, books, and ratings
-	 	n_books_returned: The number of books to be returned
+	 	n_collab_returned: The number of books to be returned
 
 	 	Returns:
 	 	top_n_book_ids: The top n books the end-user is predicted to rate highest. 
@@ -143,7 +144,7 @@ class preprocessing(object):
 	    user_authors_list = create_user_authors_list(book_ids, book_data)
 	    
 	    ## Return the books the end-user is most likely to rate highest
-	    top_n_book_ids = return_top_n_books(filled_enduser_ratings, n_books_returned, book_names, book_data, user_authors_list)
+	    top_n_book_ids = return_top_n_books(filled_enduser_ratings, n_collab_returned, book_names, book_data, user_authors_list)
 	    return top_n_book_ids
 
 	#-----------------------------Find Keyword Preference-----------------------#
