@@ -23,8 +23,7 @@
 
 .recCover{
 	cursor:pointer;
-	max-height:210;
-	min-height:210;
+	max-height:210px;
 }
 
 .recLibrary {

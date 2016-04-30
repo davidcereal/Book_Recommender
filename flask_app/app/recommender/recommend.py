@@ -426,7 +426,7 @@ class Recommend(object):
         ## Return the id's for the books and place in a list
         recommended_books = [books_df.iloc[neighbor].name for neighbor in neighbors if neighbor not in books_returned]
 
-        return recommended_books
+        return recommended_books[:7]
 
 if __name__ == "__main__":
     Recommend().main()

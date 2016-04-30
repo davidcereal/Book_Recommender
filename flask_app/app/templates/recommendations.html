@@ -8,7 +8,7 @@
   	<h4>Let's find your next book!</h4>
 <meta name="csrf-token" content="{{ csrf_token() }}">
    </div>
-<div class=row style='box-shadow: inset 0 0 12px 7px lightgray; height: 400px;overflow:scroll; padding: 15px'>
+<div class=row style='box-shadow: inset 0 0 12px 7px lightgray; height: 320px;overflow:scroll; padding: 15px'>
 <div class=row>
   {% set n = 0 %}
   {% for book_read in current_user.books_read %}	
@@ -119,6 +119,19 @@
 </div>
 </div>
 
+<div class="row" id="results">
+</div>
+
+<script id="resultScript">
+  <img class="recCover"/>
+  <div class="row" id="votes">
+    <div class="small-2 columns" id="upVote">
+    </div>
+    <div class="small-2 columns" id="downVote">
+    </div>
+  </div>
+</script>
+
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="../static/js/vendor/rating.min.js"></script>
 <script src="../static/js/vendor/rating_script.js"></script>
@@ -145,7 +158,7 @@ $(document).ready(function ()  {
 
 var bookSelections = [];
 
-(function init() {
+/*(function init() {
 	var lastBookDiv = document.querySelectorAll(['.c-rating']);
 	 	for (var i = 1; i < lastBookDiv.length+1; i++) {
 		 	console.log('list item number:')
@@ -158,7 +171,11 @@ var bookSelections = [];
       }
 })
 
-();function sendBookData(rating, ratingElement, bookWebId, bookElem){
+
+();
+*/
+
+function sendBookData(rating, ratingElement, bookWebId, bookElem){
     	$.ajaxSetup({
             headers:
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
@@ -225,8 +242,7 @@ function recommendBooks(bookSelections){
          data: JSON.stringify({"books_selected": bookSelections}),   
          success: function (data) {
          console.log('successfully deleted:');
-          console.log(data);
-          showResults(data)
+          showResults(data['recommendations'])
          },
          error: function (result) {
          console.log('you messed up')
@@ -234,11 +250,25 @@ function recommendBooks(bookSelections){
        })
      }
 
-function showResults(data){
 
 
 
+function showResults(recommendations){
+  var result_div = document.getElementById("results");
+  for (var i = 0; i < 6; i++) {
+    var result = document.createElement('div')
+    result.className="small-2 columns"
+    var result_content = document.getElementById('resultScript').innerHTML;
+    result.innerHTML = result_content;
+    var imgSrc = "/static/book_covers/" + '3' + ".jpg";
+    var img = result.querySelector('img')
+    img.src = imgSrc
+    result_div.appendChild(result);
+  }
 }
+
+
+
 
 function removeBook(book_info){
   var book_id = book_info[0]
@@ -258,7 +288,7 @@ function removeBook(book_info){
                             	addRatingWidget(bookElem, 0)
                             	clearRatingElem.parentNode.removeChild(clearRatingElem)}
 
-     function addClearRating(bookElem, ratingElement){    	                            
+     /*function addClearRating(bookElem, ratingElement){    	                            
      	var clearRatingElem = document.createElement("p")
      	clearRatingElem.className = 'clearRatingElem';
      	clearRatingElem.innerHTML = 'Clear Rating';
@@ -275,7 +305,7 @@ function removeBook(book_info){
 
 
      }
-
+      */
 
     // ADD RATING WIDGET
     function addRatingWidget(bookElem, currentRating) {
