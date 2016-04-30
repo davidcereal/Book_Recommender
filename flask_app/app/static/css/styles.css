@@ -26,12 +26,6 @@
 	max-height:210px;
 }
 
-.recLibrary {
-	height: 300px;
-	overflow:scroll;
-	
-}
-
 
 .recCover:hover{
 
@@ -52,5 +46,34 @@ box-shadow:         0px 0px 10px 2px #28aadc;
 input[type="checkbox"] {
   display: inline-block;
 }
+
+.recLibrary {
+	height: 300px;
+	overflow:scroll;
+	
+}
+
+.featureBox {
+	margin: 0; 
+	padding: 0;  
+	height:13px;
+}
+
+.resultCover{
+	cursor:pointer;
+	max-height:210px;
+}
+
+.upVote{
+	height:25px;
+
+}
+
+.downVote{
+	height:25px;
+
+	
+}
+
 
 
