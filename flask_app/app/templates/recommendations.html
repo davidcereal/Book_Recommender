@@ -226,6 +226,7 @@ function recommendBooks(bookSelections){
          success: function (data) {
          console.log('successfully deleted:');
           console.log(data);
+          showResults(data)
          },
          error: function (result) {
          console.log('you messed up')
@@ -233,6 +234,11 @@ function recommendBooks(bookSelections){
        })
      }
 
+function showResults(data){
+
+
+
+}
 
 function removeBook(book_info){
   var book_id = book_info[0]

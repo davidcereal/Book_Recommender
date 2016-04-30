@@ -27,9 +27,12 @@ def results():
     print 'worked!'
     data = request.json
     books_selected = data['books_selected']
-    g.Recommend = Recommend(user=g.user, db=db, Read=Read, books_selected=books_selected, 
-                    book_data=book_data, ipca_model=ipca_model, dict_vectorizer_fit=dict_vectorizer_fit)
-    g.recommended_books = g.Recommend.recommend_books(n_collab_returned=1000)
+    features_list = []
+    print books_selected
+    g.Recommend = Recommend(user=g.user, db=db, Read=Read, 
+                    book_data=book_data, ipca_model=ipca_model, 
+                    dict_vectorizer_fit=dict_vectorizer_fit, n_collab_returned=1000)
+    g.recommended_books = g.Recommend.recommend_books(books_selected, features_list)
     rec_data = {"recommendations": g.recommended_books}
     return jsonify(rec_data)
 
