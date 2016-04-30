@@ -13,25 +13,26 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 class Recommend(object):
-    def __init__(self, user, Read, book_data, db, ipca_model, dict_vectorizer_fit, n_collab_returned):
+    def __init__(self, user, Read, Book, book_data, db, ipca_model, dict_vectorizer_fit, n_collab_returned):
         self.user = user
         self.Read = Read
+        self.Book = Book
         self.book_data = book_data
         self.db = db
         self.ipca_model = ipca_model
         self.dict_vectorizer_fit = dict_vectorizer_fit
         self.n_collab_returned = n_collab_returned
 
-    def recommend_books(self, books_selected, features_list):
+    def recommend_books(self, books_selected, features_list, books_returned):
         """
         Function to run collaborative filtering and book-keyword similarity and return recommendations
         """
         ## Run collaborative filtering
         collab_filter_results = self.collaborative_filtering_predict(books_selected)
         for book in collab_filter_results[:10]:
-            print ' '.join(book_data[book]['title'].split())
+            print ' '.join(self.book_data[book]['title'].split())
         ## Run book similarity
-        recommended_books = self.apply_book_similarity_filtering(books_selected, collab_filter_results, features_list)
+        recommended_books = self.apply_book_similarity_filtering(books_selected, collab_filter_results, features_list, books_returned)
         return recommended_books
 
     #------------------------------Collaborative Filtering--------------------------#
@@ -50,9 +51,11 @@ class Recommend(object):
         """
         ratings_list = []
         ratings_dict= {}
-        for book_id in books_selected:
-            rating = self.db.session.query(self.Read).filter_by(user_id=self.user.id, book_id=book_id).first()
-            ratings_dict[book_id] = rating
+        for web_id in books_selected:
+            book = self.db.session.query(self.Book).filter_by(web_id=int(web_id)).first()
+            book_read = self.db.session.query(self.Read).filter_by(user_id=self.user.id, book_id=book.id).first()
+            rating = book_read.rating
+            ratings_dict[web_id] = rating
         ratings_list.append(ratings_dict)
         return ratings_list
 
@@ -150,7 +153,7 @@ class Recommend(object):
         ## Transform end-user ratings into vector fit on full user matrix 
         ## and store the book names for later
         book_names, enduser_vector = self.dv_transform_enduser_vector(ratings_list)
-        print enduser_vector
+        np.unique(enduser_vector)
         
         ## Transform user vector and predict ratings
         filled_enduser_ratings = self.ipca_tranform_enduser_vector(enduser_vector)
@@ -366,7 +369,7 @@ class Recommend(object):
         return books_df, enduser_series
 
 
-    def apply_book_similarity_filtering(self, books_selected, collab_filter_results, features_list ):
+    def apply_book_similarity_filtering(self, books_selected, collab_filter_results, features_list, books_returned ):
         """
         Function to take end-user submitted books, find the keywords that are shared
         most among them, and are highest ranked, to determine end-user's preference.
@@ -385,20 +388,14 @@ class Recommend(object):
         ## submitted books.
         user_keyword_preferences = self.user_keyword_preferences(books_selected)
         
-        print 'user_keyword_preferences'
-        print user_keyword_preferences
         
         ## Create ranking based on how many times keywords are shared
         user_preference = self.make_user_ranking(user_keyword_preferences, features_list)
         
-        print 'user_preference'
-        print user_preference
 
         ## Make a dict of keywords for top books and n times keyword mentioned
         top_books_keyword_dict = self.make_top_books_keyword_dict(collab_filter_results)
         
-        print 'top_books_keyword_dict'
-        print top_books_keyword_dict
         
         ## Only keep those books sharing a keyword with end-users keywords
         if len(features_list) >= 1:

@@ -24,16 +24,19 @@ def recommendations():
 @recommender.route('/recommendations/results', methods=['GET', 'POST']) 
 @login_required
 def results():
-    print 'worked!'
     data = request.json
-    books_selected = data['books_selected']
-    features_list = []
-    print books_selected
-    g.Recommend = Recommend(user=g.user, db=db, Read=Read, 
-                    book_data=book_data, ipca_model=ipca_model, 
-                    dict_vectorizer_fit=dict_vectorizer_fit, n_collab_returned=1000)
-    g.recommended_books = g.Recommend.recommend_books(books_selected, features_list)
+    g.books_selected = data['books_selected']
+    g.features_list = []
+    g.books_returned = []
+    g.Recommend = Recommend(user=g.user, db=db, Read=Read, Book=Book,
+                            book_data=book_data, ipca_model=ipca_model, 
+                            dict_vectorizer_fit=dict_vectorizer_fit, 
+                            n_collab_returned=1000)
+    g.recommended_books = g.Recommend.recommend_books(books_selected=g.books_selected, 
+                                                      features_list=g.features_list, 
+                                                      books_returned=g.books_returned)
     rec_data = {"recommendations": g.recommended_books}
+    print rec_data
     return jsonify(rec_data)
 
          
