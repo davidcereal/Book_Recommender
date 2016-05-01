@@ -8,6 +8,8 @@ from flask_wtf.csrf import CsrfProtect
 from recommend import Recommend
 import recommendation_data
 from recommendation_data import book_data, dict_vectorizer_fit, ipca_model
+import os
+
 
 
 
@@ -24,9 +26,17 @@ def recommendations():
 @recommender.route('/recommendations/results', methods=['GET', 'POST']) 
 @login_required
 def results():
-    data = request.json
-    g.books_selected = data['books_selected']
-    g.features_list = []
+    g.data = request.json
+    g.data = g.data['recommendation_data'][0]
+    g.books_selected = g.data['books_selected']
+    g.features_list = g.data['features_list']
+    g.up_voted = g.data['up_voted']
+    g.down_voted = g.data['down_voted']
+    print g.data
+    print g.books_selected
+    print g.features_list
+    print g.up_voted
+    print g.down_voted
     g.books_returned = []
     g.Recommend = Recommend(user=g.user, db=db, Read=Read, Book=Book,
                             book_data=book_data, ipca_model=ipca_model, 

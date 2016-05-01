@@ -6,7 +6,7 @@
 <div class=current_rating_div id={{ current_rating }}></div>
 	
 	<div class="small-2 columns", id={{web_id}}>
-		<img class="search_result_cover" src="/static/book_covers/{{ web_id }}.jpg"/>
+		<img class="search_result_cover" src={{url_for('main.download_file', filename=web_id|string + '.jpg')}}/>
 	</div>
 	<div clas"shrink columns">
 	    <div class="row">

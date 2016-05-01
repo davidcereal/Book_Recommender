@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, g, request, jsonify
+from flask import render_template, session, redirect, url_for, g, request, jsonify, send_from_directory
 from . import main
 from .. import db
 from ..models import User, Book, Read
@@ -8,10 +8,14 @@ from .. import auth
 from flask.ext.login import login_required, current_user
 from config import Config
 from flask_wtf.csrf import CsrfProtect
+import os
 
+COVERS_FOLDER = Config.COVERS_FOLDER
 
-
-
+@main.route('/uploads/<path:filename>')
+def download_file(filename):
+    path = os.path.abspath(COVERS_FOLDER)
+    return send_from_directory(COVERS_FOLDER, filename, as_attachment=True)
 
 @main.route('/', methods=['GET', 'POST']) 
 def index():

@@ -1,8 +1,8 @@
 {% block content %}
 
 
-<div class="small-2 columns" id="{{ 'iter' + n|string }}" style="padding-bottom:20px">
-	<img class="recCover" id={{ web_id }} src="/static/book_covers/3.jpg"/>
+<div class="small-2 columns" id="{{ 'iter' + n|string }}">
+	<img class="recCover" id={{ web_id }} src={{url_for('main.download_file', filename=web_id|string + '.jpg')}}/>
 	<div class ="row" id="votes">
 		<div class="small-2 columns" id="upVote">
 		</div>
