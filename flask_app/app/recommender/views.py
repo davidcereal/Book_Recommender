@@ -33,21 +33,16 @@ def results():
     g.up_voted = g.data['up_voted']
     g.down_voted = g.data['down_voted']
     g.books_returned = g.data['books_returned']
-    print g.data
-    print g.books_selected
-    print g.features_list
-    print g.up_voted
-    print g.down_voted
-    print g.books_returned
     g.Recommend = Recommend(user=g.user, db=db, Read=Read, Book=Book,
                             book_data=book_data, ipca_model=ipca_model, 
                             dict_vectorizer_fit=dict_vectorizer_fit, 
                             n_collab_returned=1000)
     g.recommended_books = g.Recommend.recommend_books(books_selected=g.books_selected, 
                                                       features_list=g.features_list, 
-                                                      books_returned=g.books_returned)
+                                                      books_returned=g.books_returned,
+                                                      up_votes=g.up_voted, 
+                                                      down_votes=g.down_voted)
     rec_data = {"recommendations": g.recommended_books}
-    print rec_data
     return jsonify(rec_data)
 
          

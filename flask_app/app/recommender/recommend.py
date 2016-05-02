@@ -23,12 +23,12 @@ class Recommend(object):
         self.dict_vectorizer_fit = dict_vectorizer_fit
         self.n_collab_returned = n_collab_returned
 
-    def recommend_books(self, books_selected, features_list, books_returned):
+    def recommend_books(self, books_selected, features_list, books_returned, up_votes, down_votes):
         """
         Function to run collaborative filtering and book-keyword similarity and return recommendations
         """
         ## Run collaborative filtering
-        collab_filter_results = self.collaborative_filtering_predict(books_selected)
+        collab_filter_results = self.collaborative_filtering_predict(books_selected, up_votes, down_votes)
         for book in collab_filter_results[:10]:
             print ' '.join(self.book_data[book]['title'].split())
         ## Run book similarity
@@ -37,7 +37,7 @@ class Recommend(object):
 
     #------------------------------Collaborative Filtering--------------------------#
 
-    def prepare_ratings_for_dv(self, books_selected):
+    def prepare_ratings_for_dv(self, books_selected, up_votes, down_votes):
         """
         Function to query the database for the ratings the user attributed to the books
         submitted. Then place ratings and book ids into format for the dict vectorizer.
@@ -56,8 +56,17 @@ class Recommend(object):
             book_read = self.db.session.query(self.Read).filter_by(user_id=self.user.id, book_id=book.id).first()
             rating = book_read.rating
             ratings_dict[web_id] = rating
+        ## Add up-votes and down-votes
+        if up_votes:
+            for upvote in up_votes:
+                ratings_dict[upvote] = 5
+        if down_votes:
+            for downvote in down_votes:
+                ratings_dict[downvote] = -5        
         ratings_list.append(ratings_dict)
         return ratings_list
+
+
 
     def dv_transform_enduser_vector(self, ratings_list):
         """
@@ -131,7 +140,7 @@ class Recommend(object):
 
 
 
-    def collaborative_filtering_predict(self, books_selected):
+    def collaborative_filtering_predict(self, books_selected, up_votes, down_votes):
         """
         With enduser input of books and ratings, predict ratings for unread books and
         return highest predicted books.
@@ -147,7 +156,7 @@ class Recommend(object):
         """
 
         ## Format end-user ratings into a list of dicts for the dict vectorizer
-        ratings_list = self.prepare_ratings_for_dv(books_selected)
+        ratings_list = self.prepare_ratings_for_dv(books_selected, up_votes, down_votes)
 
 
         ## Transform end-user ratings into vector fit on full user matrix 
@@ -417,7 +426,6 @@ class Recommend(object):
         
         ## Put neighbors in list
         neighbors = np.ndarray.tolist(book_nearest_neighbors[1])[0]
-        print 'neighbors:{}'.format(neighbors[:7])
 
         ## Find the sum of all neighbor distances (good for benchmarking)
         #sum_distances = sum(np.ndarray.tolist(book_nearest_neighbors[0])[0])
@@ -427,8 +435,6 @@ class Recommend(object):
         ## Return the id's for the books and place in a list
         recommended_books = [books_df.iloc[neighbor].name for neighbor in neighbors if books_df.iloc[neighbor].name not in books_returned]
 
-        print "recommended_books:{}".format(recommended_books[:6])
-        print "books_returned:{}".format(books_returned)
         return recommended_books[:6]
 
 if __name__ == "__main__":
