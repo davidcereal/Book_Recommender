@@ -62,8 +62,9 @@ class Recommend(object):
                 ratings_dict[upvote] = 5
         if down_votes:
             for downvote in down_votes:
-                ratings_dict[downvote] = -5        
+                ratings_dict[downvote] = -1       
         ratings_list.append(ratings_dict)
+        print ratings_list
         return ratings_list
 
 

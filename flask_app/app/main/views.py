@@ -17,33 +17,10 @@ def download_file(filename):
     path = os.path.abspath(COVERS_FOLDER)
     return send_from_directory(COVERS_FOLDER, filename, as_attachment=True)
 
-@main.route('/', methods=['GET', 'POST']) 
+@main.route('/', methods=['GET', 'POST'])
+@login_required 
 def index():
-    form = LoginForm()
-    if form.register.data:
-        print 'register data!!!!'
-        return redirect(url_for('auth.register'))
-    if form.submit_login.data:
-        print 'login data!!!!'
-        return redirect(url_for('auth.login'))
-    if form.validate_on_submit():
-        # Login and validate the user.
-        # user should be an instance of `User` class
-        user = User.query.filter_by(username=form.username.data).first()
-        if user is None:
-            username = User(username = form.username.data)
-            db.session.add(user)
-            session['known'] = False
-        else:
-            session['known'] = True
-        session['username'] = form.username.data
-        form.username.data = ''
-        return redirect(url_for('.index'))
-    return render_template('index.html',
-                            form = form, 
-                            name = session.get('name'),
-                            known = session.get('known', False),
-                            current_time = datetime.utcnow())
+    return redirect(url_for('recommender.recommendations'))
 
 
 @main.before_request
@@ -107,7 +84,7 @@ def rating():
 
 
 @main.route('/library', methods=['GET', 'POST'])
-#@login_required
+@login_required
 def library():
     print 'library route accessed'
     print g.user.email
@@ -116,7 +93,7 @@ def library():
     return render_template('library.html', current_user = g.user, db=db, Book=Book)
 
 @main.route('/delete_read', methods=['GET', 'POST'])
-#@login_required
+@login_required
 def delete_read():
     data = request.json
     print data
