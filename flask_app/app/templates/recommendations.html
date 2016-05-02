@@ -165,10 +165,28 @@ $(document).ready(function ()  {
       else {
         var index = bookSelections.indexOf(webId)
         bookSelections.splice(index, 1);
-        recommendBooks(bookSelections, featureSelections, upVoted, downVoted)
+        recommendBooks(bookSelections, featureSelections, upVoted, downVoted);
       }   
     });
   });
+
+$(document).ready(function ()  {
+    $(".featureBox").click(function() {
+    var feature = this.value
+    if ($(this).is(':checked')){
+      featureSelections.push(feature)
+      recommendBooks(bookSelections, featureSelections, upVoted, downVoted);
+      }
+    else 
+      {var index = downVoted.indexOf(feature);
+      featureSelections.splice(index, 1);
+      recommendBooks(bookSelections, featureSelections, upVoted, downVoted);
+    ;
+    };
+    });
+  });
+  
+
 
 var upVoted = [];
 var downVoted = [];
@@ -299,7 +317,7 @@ function showResults(recommendations){
     $('<a/>', {
     'id':'nextButton',
     'class':'button small',
-    'text':'more',
+    'text':'next',
     'style':'float:right',
     }).appendTo(nextDiv);
   for (var i = 0; i < 6; i++) {
