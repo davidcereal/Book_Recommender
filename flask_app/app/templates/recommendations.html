@@ -159,13 +159,14 @@ $(document).ready(function ()  {
       var webId = this.id
       if (this.className.substring(9) == "HL"){
         bookSelections.push(webId);
-        recommendBooks(bookSelections, featureSelections, upVoted, downVoted)
+        booksReturned = [];
+        recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned)
       
       }
       else {
         var index = bookSelections.indexOf(webId)
         bookSelections.splice(index, 1);
-        recommendBooks(bookSelections, featureSelections, upVoted, downVoted);
+        recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned);
       }   
     });
   });
@@ -174,14 +175,15 @@ $(document).ready(function ()  {
     $(".featureBox").click(function() {
     var feature = this.value
     if ($(this).is(':checked')){
-      featureSelections.push(feature)
-      recommendBooks(bookSelections, featureSelections, upVoted, downVoted);
+      featureSelections.push(feature);
+      booksReturned = [];
+      recommendBooks(bookSelections, featureSelections, upVoted, booksReturned);
       }
     else 
       {var index = downVoted.indexOf(feature);
       featureSelections.splice(index, 1);
-      recommendBooks(bookSelections, featureSelections, upVoted, downVoted);
-    ;
+      booksReturned = [];
+      recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned);
     };
     });
   });
@@ -192,6 +194,8 @@ var upVoted = [];
 var downVoted = [];
 var bookSelections = [];
 var featureSelections = [];
+var booksReturned = [];
+
 
 $(document).ready(function ()  {
   $(document).on('click',".upVote", function ()  {
@@ -273,7 +277,7 @@ $(document).ready(function ()  {
 
 
 
-function recommendBooks(bookSelections, featureSelections, upVoted, downVoted){
+function recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned){
       $.ajaxSetup({
             headers:
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
@@ -286,25 +290,31 @@ function recommendBooks(bookSelections, featureSelections, upVoted, downVoted){
          url: "{{ url_for('recommender.results') }}",
          dataType: "json",
          async: true,
-         data: JSON.stringify({"recommendation_data":[{"books_selected": bookSelections, "features_list":featureSelections, "up_voted":upVoted, "down_voted":downVoted}]}),  
+         data: JSON.stringify({"recommendation_data":[{"books_selected": bookSelections, "features_list":featureSelections, "up_voted":upVoted, "down_voted":downVoted, "books_returned":booksReturned}]}),  
          success: function (data) {
          console.log('successfully deleted:');
-          showResults(data['recommendations'])
+          showResults(data['recommendations']);
+          for (i = 0; i<6; i++){
+            booksReturned.push(data['recommendations'][i])
+          };
          },
          error: function (result) {
          console.log('you messed up')
          }
        })
-     }
+     };
 
-
+function prevClick(){
+  booksReturned.splice(booksReturned.length -12, 12)
+  recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned)
+}
 
 
 function showResults(recommendations){
   var result_div = document.getElementById("results");
   result_div.innerHTML=''
   var recHeader = document.getElementById("recHeader");
-  recHeader.innerHTML =   '<h6>Recommendations</h6>';
+  recHeader.innerHTML =   '<h5>Recommendations</h5>';
   var prevDiv = document.getElementById("prevButtonDiv");
   var nextDiv = document.getElementById("nextButtonDiv");
   prevDiv.innerHTML = ''
@@ -313,17 +323,19 @@ function showResults(recommendations){
     'id':'prevButton',
     'class':'button small',
     'text':'previous',
+    'onclick': 'prevClick()'
     }).appendTo(prevDiv);
     $('<a/>', {
     'id':'nextButton',
     'class':'button small',
     'text':'next',
     'style':'float:right',
+    'onclick': 'recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned)'
     }).appendTo(nextDiv);
   for (var i = 0; i < 6; i++) {
-    webId = recommendations[i]
-    var result = document.createElement('div')
-    result.className="small-2 columns"
+    webId = recommendations[i];
+    var result = document.createElement('div');
+    result.className="small-2 columns";
     var result_content = document.getElementById('resultScript').innerHTML;
     result.innerHTML = result_content;
     var img = result.querySelector('img');
@@ -343,8 +355,7 @@ function showResults(recommendations){
 
 
 
-
-function removeBook(book_info){
+/*function removeBook(book_info){
   var book_id = book_info[0]
   var i = book_info[1]
   var iter = i.toString()
@@ -362,7 +373,7 @@ function removeBook(book_info){
                             	addRatingWidget(bookElem, 0)
                             	clearRatingElem.parentNode.removeChild(clearRatingElem)}
 
-     /*function addClearRating(bookElem, ratingElement){    	                            
+     function addClearRating(bookElem, ratingElement){    	                            
      	var clearRatingElem = document.createElement("p")
      	clearRatingElem.className = 'clearRatingElem';
      	clearRatingElem.innerHTML = 'Clear Rating';
@@ -379,7 +390,7 @@ function removeBook(book_info){
 
 
      }
-      */
+      
 
     // ADD RATING WIDGET
     function addRatingWidget(bookElem, currentRating) {
@@ -399,6 +410,7 @@ function removeBook(book_info){
       	 }
       var r = rating(ratingElement, currentRating, maxRating, callback);  
     }
+     */
 </script>
  
 {% endblock %}

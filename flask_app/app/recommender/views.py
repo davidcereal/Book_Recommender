@@ -32,12 +32,13 @@ def results():
     g.features_list = g.data['features_list']
     g.up_voted = g.data['up_voted']
     g.down_voted = g.data['down_voted']
+    g.books_returned = g.data['books_returned']
     print g.data
     print g.books_selected
     print g.features_list
     print g.up_voted
     print g.down_voted
-    g.books_returned = []
+    print g.books_returned
     g.Recommend = Recommend(user=g.user, db=db, Read=Read, Book=Book,
                             book_data=book_data, ipca_model=ipca_model, 
                             dict_vectorizer_fit=dict_vectorizer_fit, 

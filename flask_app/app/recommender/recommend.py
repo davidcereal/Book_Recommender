@@ -417,6 +417,7 @@ class Recommend(object):
         
         ## Put neighbors in list
         neighbors = np.ndarray.tolist(book_nearest_neighbors[1])[0]
+        print 'neighbors:{}'.format(neighbors[:7])
 
         ## Find the sum of all neighbor distances (good for benchmarking)
         #sum_distances = sum(np.ndarray.tolist(book_nearest_neighbors[0])[0])
@@ -424,9 +425,11 @@ class Recommend(object):
         #print sum_distances
         
         ## Return the id's for the books and place in a list
-        recommended_books = [books_df.iloc[neighbor].name for neighbor in neighbors if neighbor not in books_returned]
+        recommended_books = [books_df.iloc[neighbor].name for neighbor in neighbors if books_df.iloc[neighbor].name not in books_returned]
 
-        return recommended_books[:7]
+        print "recommended_books:{}".format(recommended_books[:6])
+        print "books_returned:{}".format(books_returned)
+        return recommended_books[:6]
 
 if __name__ == "__main__":
     Recommend().main()

@@ -4,7 +4,7 @@
 }
 
 .library_book_cover {
-	max-height: 180px;
+	height: 180px;
 
 }
 
@@ -17,7 +17,7 @@
 .bookResult {
 	padding-bottom: 30px;
 	cursor: pointer;
-	max-height: 180px;
+	height: 180px;
 
 }
 
