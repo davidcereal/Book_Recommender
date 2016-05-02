@@ -5,7 +5,7 @@ from ..models import User, Book, Read
 from config import Config
 from flask.ext.login import login_required, current_user
 from flask_wtf.csrf import CsrfProtect
-from recommend import Recommend
+from recommend import Recommend, format_keywords_for_d3, get_book_info
 import recommendation_data
 from recommendation_data import book_data, dict_vectorizer_fit, ipca_model
 import os
@@ -44,5 +44,19 @@ def results():
                                                       down_votes=g.down_voted)
     rec_data = {"recommendations": g.recommended_books}
     return jsonify(rec_data)
+
+# Get user books and features input and return recommendations 
+@recommender.route("/recommendations/results/visualize", methods=["POST"])
+@login_required
+def keywords_to_d3():
+    g.data = request.json
+    print g.data
+    g.book_id = g.data["book_id"][0]
+    print 'g.book_id: {}'.format(g.book_id)
+    g.book_keywords = book_data[g.book_id]['keywords']
+    g.d3_keywords = format_keywords_for_d3(g.book_keywords)
+    g.book_info = get_book_info(g.book_id, book_data)
+    g.results = {"book_info":g.book_info, "d3_info": {'name': 'flare', "children": [{'name': 'cluster', 'children': g.d3_keywords}]}}
+    return jsonify(g.results)
 
          

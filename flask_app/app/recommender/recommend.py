@@ -10,6 +10,30 @@ from sklearn.decomposition import IncrementalPCA
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.ensemble import RandomForestClassifier
 
+def format_keywords_for_d3(keyword_counts):
+    """
+    Function to take a books keywords and keyword counts and 
+    reuturn it in format suitable for the d3 visualization.
+    """
+    keywords = []
+    for key, value in keyword_counts.items():
+        keyword_dict = {}
+        keyword_dict['name'] = key
+        keyword_dict['size'] = value
+        keywords.append(keyword_dict)
+    return keywords
+
+
+def get_book_info(book_id, book_data):
+    """
+    Function to return the title, author, description for a given book. 
+    """
+    title = book_data[book_id]['title']
+    author = book_data[book_id]['author']
+    description = book_data[book_id]['description']
+    book_info = [title, author, description]
+    return book_info
+
 
 
 class Recommend(object):
