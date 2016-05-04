@@ -101,7 +101,6 @@ def delete_read():
     read_record = db.session.query(Read).filter_by(book=book, user_id=current_user.id).first()
     print read_record
     db.session.delete(read_record)
-    db.session.commit()
     book_deleted = {'book deleted': read_record.book_id}
     return jsonify(book_deleted)
 

@@ -100,28 +100,12 @@ function removeBook(book_info){
 
 }
 
-     function cearRatingClick(ratingElement, bookElem, clearRatingElem){
+     function clearRatingClick(ratingElement, bookElem, clearRatingElem){
                             	ratingElement.innerHTML='';
                             	addRatingWidget(bookElem, 0)
                             	clearRatingElem.parentNode.removeChild(clearRatingElem)}
 
-     function addClearRating(bookElem, ratingElement){    	                            
-     	var clearRatingElem = document.createElement("p")
-     	clearRatingElem.className = 'clearRatingElem';
-     	clearRatingElem.innerHTML = 'Clear Rating';
-      book_id = bookElem.querySelector('.book_id').id;
-      console.log(book_id);
-     	clearRatingElem.onclick = function () {
-                            	ratingElement.innerHTML='';
-                            	addRatingWidget(bookElem, 0)
-                            	clearRatingElem.parentNode.removeChild(clearRatingElem)
-                              deleteReadRecord(book_id)}
-
-      console.log('worked')                        
-      ratingElement.parentNode.lastElementChild.appendChild(clearRatingElem)
-
-
-     }
+     
 
 
     // ADD RATING WIDGET
