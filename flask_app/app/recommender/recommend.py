@@ -10,6 +10,8 @@ from sklearn.decomposition import IncrementalPCA
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.ensemble import RandomForestClassifier
 
+
+
 def format_keywords_for_d3(keyword_counts):
     """
     Function to take a books keywords and keyword counts and 
@@ -53,7 +55,7 @@ class Recommend(object):
         """
         ## Run collaborative filtering
         collab_filter_results = self.collaborative_filtering_predict(books_selected, up_votes, down_votes)
-        for book in collab_filter_results[:10]:
+        for book in collab_filter_results[:100]:
             print ' '.join(self.book_data[book]['title'].split())
         ## Run book similarity
         recommended_books = self.apply_book_similarity_filtering(books_selected, collab_filter_results, features_list, books_returned)

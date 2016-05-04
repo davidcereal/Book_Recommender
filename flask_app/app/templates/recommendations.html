@@ -8,7 +8,7 @@
   	<h4>Let's find your next book!</h4>
 <meta name="csrf-token" content="{{ csrf_token() }}">
    </div>
-<div class=row style='box-shadow: inset 0 0 5px 1px gray; height: 320px;overflow:scroll; padding: 15px'>
+<div class="row container" style='box-shadow: inset 0 0 5px 1px gray; height: 320px;overflow:scroll; padding: 15px'>
 <div class=row>
   {% set n = 0 %}
   {% for book_read in current_user.books_read %}	
@@ -135,7 +135,8 @@
   </div>
 
 <div class="large reveal" id="bookModal" data-reveal>
-<div class="row" id=titleDiv></div>
+<div class="row" id=titleDiv style="padding-left:14px"></div>
+<div class="row" id=authorDiv style="padding-left:14px"></div>
 <div class="row">
   <div class="medium-6 columns" id="descriptionDiv">
   </div>
@@ -172,20 +173,21 @@ function insertBookInfo(book_info) {
     var title = book_info[0];
     var author = book_info[1];
     var description = book_info[2];
-    var titleDiv = document.getElementById("titleDiv")
+    var titleDiv = document.getElementById("titleDiv");    
+    var authorDiv = document.getElementById("authorDiv");
     var descriptionDiv = document.getElementById("descriptionDiv")
     titleDiv.innerHTML = ""
     descriptionDiv.innerHTML = ""
     var d3_container = document.getElementById("d3_container");
-    var heading1 = document.createElement("h1");
-    var heading4 = document.createElement("h4");
-    var para = document.createElement("p");
-    para.innerHTML = description
-    heading1.innerHTML = title
-    heading4.innerHTML = author
-    titleDiv.appendChild(heading1);
-    titleDiv.appendChild(heading4);
-    descriptionDiv.appendChild(para);
+    var titleElem = document.createElement("h2");
+    var authorElem = document.createElement("h5");
+    var descElem = document.createElement("p");
+    descElem.innerHTML = description
+    titleElem.innerHTML = title
+    authorElem.innerHTML = author
+    titleDiv.appendChild(titleElem);
+    authorDiv.appendChild(authorElem);
+    descriptionDiv.appendChild(descElem);
     }
 
 $(document).ready(function ()  {
@@ -194,6 +196,8 @@ $(document).ready(function ()  {
       var webId = this.id
       if (this.className.substring(9) == "HL"){
         bookSelections.push(webId);
+        upVoted = [];
+        downVoted = [];
         booksReturned = [];
         recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned)
       
@@ -201,6 +205,9 @@ $(document).ready(function ()  {
       else {
         var index = bookSelections.indexOf(webId)
         bookSelections.splice(index, 1);
+        upVoted = [];
+        downVoted = [];
+        booksReturned = [];
         recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned);
       }   
     });
@@ -211,12 +218,16 @@ $(document).ready(function ()  {
     var feature = this.value
     if ($(this).is(':checked')){
       featureSelections.push(feature);
+      upVoted = []
+      downVoted = []
       booksReturned = [];
       recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned);
       }
     else 
       {var index = downVoted.indexOf(feature);
       featureSelections.splice(index, 1);
+      upVoted = []
+      downVoted = []
       booksReturned = [];
       recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned);
     };
@@ -385,17 +396,25 @@ function showResults(recommendations){
   var nextDiv = document.getElementById("nextButtonDiv");
   prevDiv.innerHTML = ''
   nextDiv.innerHTML = ''
+  if (booksReturned < 7){
+    var buttonClass = 'button small disabled'
+  }
+  else {
+    var buttonClass = 'button small'
+  };
   $('<a/>', {
     'id':'prevButton',
-    'class':'button small',
+    'class':buttonClass,
     'text':'previous',
+    'style': 'font-weight:bold;',
     'onclick': 'prevClick()'
     }).appendTo(prevDiv);
+
     $('<a/>', {
     'id':'nextButton',
     'class':'button small',
     'text':'next',
-    'style':'float:right',
+    'style':'float:right; font-weight:bold;',
     'onclick': 'recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned)'
     }).appendTo(nextDiv);
   for (var i = 0; i < 6; i++) {

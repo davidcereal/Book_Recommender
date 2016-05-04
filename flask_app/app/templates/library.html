@@ -56,8 +56,6 @@
          async: true,
          data: JSON.stringify({"rating": [bookWebId, rating]}),   
          success: function (data) {
-         console.log('successfully rated:');
-          console.log(data);
           addClearRating(bookElem, ratingElement)
          },
          error: function (result) {
@@ -82,8 +80,6 @@ function deleteReadRecord(book_id){
          async: true,
          data: JSON.stringify({"book_info": [book_id]}),   
          success: function (data) {
-         console.log('successfully deleted:');
-          console.log(data);
          },
          error: function (result) {
          console.log('you messed up')
@@ -113,9 +109,7 @@ function removeBook(book_info){
      	var clearRatingElem = document.createElement("p")
      	clearRatingElem.className = 'clearRatingElem';
      	clearRatingElem.innerHTML = 'Clear Rating';
-      alert(bookElem);
       book_id = bookElem.querySelector('.book_id').id;
-      alert(bookElem);
       console.log(book_id);
      	clearRatingElem.onclick = function () {
                             	ratingElement.innerHTML='';
@@ -143,9 +137,10 @@ function removeBook(book_info){
       var maxRating = 5;
       var callback = function(rating, bookWebId, ratingElement) {
       	var ratingElement = bookElem.querySelector('.c-rating')
-      	var bookWebId = ratingElement.parentNode.id;
+      	var bookWebId = ratingElement.querySelector('.webId').id
+        deleteReadRecord(bookWebId);
       	sendBookData(rating, ratingElement, bookWebId, bookElem)
-      	 }
+        }
       var r = rating(ratingElement, currentRating, maxRating, callback);  
     }
 </script>

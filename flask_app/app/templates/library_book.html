@@ -1,12 +1,14 @@
 {% block content %}
 
 
-<div class="small-4 columns" id="{{ 'iter' + n|string }}">
+<div class="small-4 columns" id="{{ 'iter' + n|string }}" style="padding-bottom: 10px">
 	<img class="library_book_cover" src={{url_for('main.download_file', filename=web_id|string + '.jpg')}}/>
 	<h6>{{ title }}</h6>
-	<h6 class="subheader">{{ author }}</h6>
-	<div class =current_rating_div id={{ current_rating }}></div>
-	<div class="c-rating" id='c-rating'></div>
+	<h6 class="subheader" style="margin-top: -5px">{{ author }}</h6>
+	<div class =current_rating_div id={{ current_rating }} style="display:none;"></div>
+	<div class="c-rating" id='c-rating' style="margin-top: -7px">
+		<div class="webId" id={{web_id}} style="display:none;" ></div>
+	</div>
 	<p class=removeBook onclick=removeBook([{{book_id}},{{n}}])>Remove from Library</p>
 </div>
 
