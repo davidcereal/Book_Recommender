@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form 
+from flask.ext.wtf import Form, RecaptchaField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo, DataRequired
 from wtforms import ValidationError
@@ -17,14 +17,17 @@ class RegistrationForm(Form):
                                              Email()])
     first_name = StringField('First Name', validators= [Required(), Length(1, 64)])
     #last_name = String(Field('Last Name'), validators= [Length(1, 64)])
-    password1 = PasswordField('Password', validators=[
-        Required(), EqualTo('password2', message='Passwords must match.')])
-    password2 = PasswordField('Confirm password', validators=[Required()])
+    password1 = PasswordField('Password', validators=[Required(), 
+                                                    Length(min=8)])
+    password2 = PasswordField('Confirm password', validators=[Required(), 
+                                                            EqualTo('password1', message='Passwords must match.')])
+    recaptcha = RecaptchaField()
     register = SubmitField('Register')
+
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
-            raise ValidationError('Email already registered.')
+            raise ValidationError('That email address is already registered.')
 
 class SearchForm(Form):
     search = StringField('search', validators=[DataRequired()])
