@@ -25,15 +25,12 @@ def index():
 
 @main.before_request
 def before_request():
-    print 'current user!!!!!!!!!!!!'
-    print current_user
     g.user = current_user
     if g.user.is_authenticated:
         g.user.last_seen = datetime.utcnow()
         db.session.add(g.user)
         db.session.commit()
         g.search_form = SearchForm()
-    else: print 'not authenticated!!!!!!!!!!!!!!!!!!!!!!!!!!'
     #g.locale = get_locale()
 
 @main.route('/search', methods=['GET', 'POST'])
@@ -41,7 +38,10 @@ def before_request():
 def search():
     form = SearchForm()
     if form.search.data:
+        session['query'] = g.search_form.search.data
         return redirect(url_for('main.search_results', query=g.search_form.search.data))
+    elif session.get('query'):
+        return redirect(url_for('main.search_results', query=session.get('query')))
     return render_template('search.html', form=form)
 
 

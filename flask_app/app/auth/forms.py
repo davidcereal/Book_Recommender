@@ -1,8 +1,17 @@
 from flask.ext.wtf import Form, RecaptchaField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import Required, Length, Email, Regexp, EqualTo, DataRequired
+from wtforms.validators import Required, Length, Email, Regexp, EqualTo, DataRequired, URL
 from wtforms import ValidationError
 from ..models import User
+from flask.ext.bcrypt import Bcrypt
+from flask.ext.openid import OpenID
+
+bcrypt = Bcrypt()
+oid = OpenID()
+
+
+class OpenIDForm(Form):
+    openid = StringField('OpenID URL', [DataRequired(), URL()])
 
 class LoginForm(Form):
     email = StringField('Email', validators=[Required(), Length(1,64), Email()])

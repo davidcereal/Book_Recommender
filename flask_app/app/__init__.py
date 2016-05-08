@@ -6,8 +6,9 @@ from config import config
 from flask.ext.login import LoginManager
 from flask import Blueprint
 from flask_wtf.csrf import CsrfProtect
+#from flask_alembic import Alembic
 
-
+#alembic = Alembic()
 moment = Moment()
 db = SQLAlchemy()
 
@@ -25,6 +26,7 @@ def create_app(config_name):
 	moment.init_app(app)
 	db.init_app(app)
 	csrf.init_app(app)
+	#alembic.init_app(app)
 
 	login_manager.init_app(app)
 

@@ -18,9 +18,22 @@
       <div class="row align-center">
           {{form.register(class="expanded alert button")}}
       </div>
+      <form method="POST" action="{{ url_for('.register') }}">
+                {{ openid_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ openid_form.openid.label }}
+                    {% if openid_form.openid.errors %}
+                        {% for e in openid_form.openid.errors %}
+                            <p class="help-block">{{ e }}</p>
+                        {% endfor %}
+                    {% endif %}
+                    {{ openid_form.openid(class_='form-control') }}
+                </div>
+                <h2 class="text-center">Register With Facebook</h2>                <a href="{{ url_for('auth.facebook_login') }}">Login</a>
+
+
     </form>
-</div>
-</div>
+
 
 
 
