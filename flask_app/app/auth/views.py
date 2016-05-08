@@ -1,9 +1,10 @@
 from flask import render_template, redirect, request, url_for, flash, session
 from flask.ext.login import login_user
 from . import auth
+
 from ..models import User
 from .forms import LoginForm, RegistrationForm, SearchForm, OpenIDForm
-from flask.ext.login import logout_user, login_required, current_user
+from flask.ext.login import logout_user, login_required, current_user, login_user
 from .. import db
 
 from flask.ext.bcrypt import Bcrypt
@@ -41,7 +42,7 @@ def login():
         return oid.try_login(
             openid_form.openid.data,
             ask_for=['email'],
-            ask_for_optional=['first_name']
+            #ask_for_optional=['first_name']
             )
     if form.register.data:
         return redirect(url_for('auth.register'))
@@ -63,11 +64,13 @@ def login():
 
 @auth.route('/facebook')
 def facebook_login():
+    form = LoginForm()
     return facebook.authorize(
         callback=url_for(
             '.facebook_authorized',
-            next=None,
-            _external=True
+            next=url_for('recommender.recommendations'),
+            _external=True, 
+            form=form
         )
     )
 
@@ -75,6 +78,7 @@ def facebook_login():
 @auth.route('/facebook/authorized')
 @facebook.authorized_handler
 def facebook_authorized(resp):
+    form = LoginForm()
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
             request.args['error_reason'],
@@ -84,18 +88,18 @@ def facebook_authorized(resp):
     session['facebook_oauth_token'] = (resp['access_token'], '')
 
     me = facebook.get('/me')
-    user = User.query.filter_by(
-        social_id=me.data['id'])
+    user = db.session.query(User).filter_by(
+        social_id=me.data['id']).first()
 
     if not user:
-        user = User(social_id=me.data['id'], first_name=me.data['first_name'])
+        user = User(social_id=me.data['id'])
         db.session.add(user)
         db.session.commit()
 
-    login_user(user)
+    login_user(user, form.remember_me.data)
     flash("You have been logged in.", category="success")
 
-    return redirect(url_for('/login'))
+    return redirect(url_for('recommender.recommendations'))
 
 
 @auth.route('/logout') 
@@ -109,15 +113,29 @@ def logout():
 def register():
     print 'accessed the register route'
     form = RegistrationForm()
+    openid_form = OpenIDForm()
+
+    if openid_form.validate_on_submit():
+        return oid.try_login(
+            openid_form.openid.data,
+            ask_for=['email'],
+            #ask_for_optional=['first_name']
+        )
+
     if form.validate_on_submit():
         print 'validated!!!!!!!!'
         user = User(email=form.email.data,
-                    first_name = form.first_name.data,
+                    name = form.name.data,
                     password = form.password1.data)
         db.session.add(user)
         db.session.commit()
         flash('You can now login')
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('recommender.recommendations'))
+    openid_errors = oid.fetch_error()
+    if openid_errors:
+        flash(openid_errors, category="danger")
+
+
     print form.errors
-    return render_template('auth/register.html', form=form)
+    return render_template('auth/register.html', form=form, openid_form=openid_form)
     

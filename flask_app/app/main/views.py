@@ -86,9 +86,6 @@ def rating():
 @login_required
 def library():
     print 'library route accessed'
-    print g.user.email
-    print g.user.first_name
-    print g.user
     return render_template('library.html', current_user = g.user, db=db, Book=Book)
 
 @main.route('/delete_read', methods=['GET', 'POST'])

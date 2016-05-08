@@ -24,7 +24,7 @@ class LoginForm(Form):
 class RegistrationForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
-    first_name = StringField('First Name', validators= [Required(), Length(1, 64)])
+    name = StringField('Name', validators= [Required(), Length(1, 64)])
     #last_name = String(Field('Last Name'), validators= [Length(1, 64)])
     password1 = PasswordField('Password', validators=[Required(), 
                                                     Length(min=8)])

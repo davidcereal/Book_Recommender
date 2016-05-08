@@ -18,18 +18,19 @@
       <div class="row align-center">
           {{form.register(class="expanded alert button")}}
       </div>
-      <form method="POST" action="{{ url_for('.register') }}">
-                {{ openid_form.hidden_tag() }}
-                <div class="form-group">
-                    {{ openid_form.openid.label }}
-                    {% if openid_form.openid.errors %}
-                        {% for e in openid_form.openid.errors %}
-                            <p class="help-block">{{ e }}</p>
-                        {% endfor %}
-                    {% endif %}
-                    {{ openid_form.openid(class_='form-control') }}
-                </div>
-                <h2 class="text-center">Register With Facebook</h2>                <a href="{{ url_for('auth.facebook_login') }}">Login</a>
+      <div class="row align-center">
+          <p style="font-style: italic; color:gray; font-size: 16px">- or -</p>
+      </div>
+      <div class="row align-justify" style="padding-bottom:20px">
+          <div class="shrink columns" >
+            <a href="{{ url_for('auth.facebook_login') }}" >
+              <img src="../static/assets/facebook_button.svg" style="width:175px;">
+            </a>
+          </div>
+          <div  class="shrink columns">
+              <img href="{{ url_for('auth.facebook_login') }}" src="../static/assets/google_logo_2.svg" style="width:175px;">
+          </div>
+      </div>
 
 
     </form>
