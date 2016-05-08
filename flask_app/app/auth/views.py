@@ -88,7 +88,7 @@ def facebook_authorized(resp):
         social_id=me.data['id'])
 
     if not user:
-        user = User(social_id=me.data['id'], first_name=me.data['first_name'], last_name=me.data['last_name'])
+        user = User(social_id=me.data['id'], first_name=me.data['first_name'])
         db.session.add(user)
         db.session.commit()
 
