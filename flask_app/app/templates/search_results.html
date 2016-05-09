@@ -26,7 +26,7 @@
   	{% endwith %}
  	{% endfor %}
  </div>
-
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="../static/js/vendor/rating.min.js"></script>
 <script src="../static/js/vendor/rating_script.js"></script>
 
@@ -75,6 +75,7 @@ function deleteReadRecord(book_id){
 
 
     function sendBookData(rating, ratingElement, bookWebId, bookElem){
+
     	$.ajaxSetup({
             headers:
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
@@ -90,7 +91,11 @@ function deleteReadRecord(book_id){
          async: true,
          data: JSON.stringify({"rating": [bookWebId, rating]}),   
          success: function (data) {
-          addClearRating(bookElem, ratingElement)
+          var initStatus = bookElem.querySelector('.initStatus')
+          initStatus.id= 'False'
+          if (bookElem.querySelector('.clearRatingElem') == undefined){
+            addClearRating(bookElem, ratingElement)
+          };
          },
          error: function (result) {
          console.log('you messed up')
@@ -104,6 +109,7 @@ function deleteReadRecord(book_id){
      	var clearRatingElem = document.createElement("p")
      	clearRatingElem.className = 'clearRatingElem';
      	clearRatingElem.innerHTML = 'Clear Rating';
+      var current_rating = bookElem.querySelector('.current_rating_div').id
      	var book_id = bookElem.querySelector('.book_id').id;
      	clearRatingElem.onclick = function () {
                             	ratingElement.innerHTML='';
@@ -117,19 +123,44 @@ function deleteReadRecord(book_id){
 
      }
 
+$(document).ready(function ()  {
+  $(document).on('click',".c-rating", function ()  {
+    var bookElem = this.parentNode.parentNode.parentNode.parentNode;
+    var initStatus = bookElem.querySelector('.initStatus').id;
+    var clearRatingElem = bookElem.querySelector('.clearRatingElem');
+    var ratingElement = this
+    var current_rating = bookElem.querySelector('.current_rating_div').id
+    var bookWebId = bookElem.querySelector('.webId').id;
+    if (clearRatingElem !== undefined && initStatus == 'True'){
+  
+          deleteReadRecord(bookWebId);
+          sendBookData(current_rating, ratingElement, bookWebId, bookElem)
+
+      };
+  })
+})
+
 
     // ADD RATING WIDGET
     function addRatingWidget(bookElem, currentRating, ratingElement) {
-    	
+
+
       console.log('function called');
       var bookWebId = ratingElement.parentNode.id;
       var maxRating = 5;
       var callback = function(rating, bookWebId, ratingElement) {
+        console.log(bookElem)
       	var ratingElement = bookElem.querySelector('.c-rating');
         var bookWebId = bookElem.querySelector('.webId').id;
-        deleteReadRecord(bookWebId);
-        clearRatingElem = bookElem.querySelector('.clearRatingElem')
-        clearRatingElem.parentNode.removeChild(clearRatingElem)
+        var initStatus = bookElem.querySelector('.initStatus').id;
+        var clearRatingElem = bookElem.querySelector('.clearRatingElem')
+        var current_rating = bookElem.querySelector('.current_rating_div')
+        current_rating.id = rating
+
+        if (clearRatingElem !== undefined && initStatus !== 'True'){
+          deleteReadRecord(bookWebId);
+        
+      };
       	sendBookData(rating, ratingElement, bookWebId, bookElem)
       	 }
       var r = rating(ratingElement, currentRating, maxRating, callback);  

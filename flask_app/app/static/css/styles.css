@@ -23,7 +23,8 @@
 
 .recCover{
 	cursor:pointer;
-	height:210px;
+	height:205px;
+	width: 135px;
 }
 
 
@@ -50,7 +51,8 @@ input[type="checkbox"] {
 .recLibrary {
 	height: 300px;
 	overflow:scroll;
-	
+	width: 100px;
+
 }
 
 .featureBox {
@@ -73,15 +75,5 @@ input[type="checkbox"] {
 	height:25px;
 
 	
-}
 
-.facebookButton{
-	background: #3b5998;
-
-}
-
-.googleButton{
-	background: #DD4B39;
-
-}
 
