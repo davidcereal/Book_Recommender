@@ -1,3 +1,8 @@
+.backgroundContainer{
+	background: url("https://upload.wikimedia.org/wikipedia/commons/2/2b/Bookshelf.jpg") no-repeat center;
+	height: 940px;
+}
+
 .search_result_cover {
 	max-height: 150px;
 

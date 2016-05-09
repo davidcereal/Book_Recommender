@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<div class="row align-center">
+<section class="backgroundContainer">
+<div class="row align-left" style="padding-top:100px">
   <div class="login-box">
     <form method="POST" action="">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -28,9 +28,15 @@
             </a>
           </div>
           <div  class="shrink columns" style="margin-left:-10px; margin-right:-15px;">
-              <img href="{{ url_for('auth.facebook_login') }}" src="../static/assets/google_logo_2.svg" style="width:175px;">
+              <a href="{{ url_for('auth.google_login') }}" >
+              <img src="../static/assets/google_logo_2.svg" style="width:175px;">
+            </a>
           </div>
       </div>
+      </form>
+    </div>
+  </div>
+  </section>
 
 
     </form>

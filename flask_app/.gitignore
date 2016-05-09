@@ -8,6 +8,8 @@
 /test/
 test/*
 
+config.py
+
 /whoosh_index_test
 /whoosh_index_test/
 /whoosh_index
