@@ -6,8 +6,8 @@ import flask.ext.whooshalchemy
 class Read(db.Model):
     __tablename__ = 'reads'
     #id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    book_id = db.Column(db.Integer, db.ForeignKey('books.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True, index=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.id'), primary_key=True, index=True)
     rating = db.Column(db.Integer, index=True)
     book = db.relationship("Book", back_populates='users')
     user = db.relationship("User", back_populates='books_read')
@@ -22,7 +22,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(64), index=True)
     social_id = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
-    books_read = db.relationship('Read', back_populates='user', index=True)
+    books_read = db.relationship('Read', back_populates='user')
 
     def __repr__(self):
         return '<User %r>' % self.email
@@ -47,16 +47,16 @@ class Book(db.Model):
     author = db.Column(db.String, index=True)
     publication_date = db.Column(db.String, index=True)
     description = db.Column(db.String, index=True)
-    users = db.relationship('Read', back_populates='book', index=True) 
-    keywords = db.relationship('Book_keyword', back_populates='book', index=True)
+    users = db.relationship('Read', back_populates='book') 
+    keywords = db.relationship('Book_keyword', back_populates='book')
 
     def __repr__(self):
         return '<Book %r>' % self.title
 
 class Keyword(db.Model):
     __tablename__ = 'keywords'
-    id = db.Column(db.Integer, primary_key=True)
-    keyword_label = db.Column(db.String)
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    keyword_label = db.Column(db.String, index=True)
     books = db.relationship('Book_keyword', back_populates='keyword')
 
     def __repr__(self):
@@ -64,9 +64,9 @@ class Keyword(db.Model):
 
 class Book_keyword(db.Model):
     __tablename__ = 'book_keywords'
-    book_id = db.Column(db.Integer, db.ForeignKey('books.id'), primary_key=True)
-    keyword_id = db.Column(db.Integer, db.ForeignKey('keywords.id'), primary_key=True)
-    keyword_weight = db.Column(db.Integer)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.id'), primary_key=True, index=True)
+    keyword_id = db.Column(db.Integer, db.ForeignKey('keywords.id'), primary_key=True, index=True)
+    keyword_weight = db.Column(db.Integer, index=True)
     book = db.relationship('Book', back_populates='keywords') 
     keyword = db.relationship('Keyword', back_populates='books') 
 
