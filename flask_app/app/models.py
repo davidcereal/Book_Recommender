@@ -22,7 +22,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(64), index=True)
     social_id = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
-    books_read = db.relationship('Read', back_populates='user')
+    books_read = db.relationship('Read', back_populates='user', index=True)
 
     def __repr__(self):
         return '<User %r>' % self.email
@@ -41,14 +41,14 @@ class User(UserMixin, db.Model):
 class Book(db.Model):
     __tablename__ = 'books'
     __searchable__ = ['title', 'author']  
-    id = db.Column(db.Integer, primary_key=True)
-    web_id = db.Column(db.Integer, unique=True)
-    title = db.Column(db.String)
-    author = db.Column(db.String)
-    publication_date = db.Column(db.String)
-    description = db.Column(db.String)
-    users = db.relationship('Read', back_populates='book') 
-    keywords = db.relationship('Book_keyword', back_populates='book')
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    web_id = db.Column(db.Integer, unique=True, index=True)
+    title = db.Column(db.String, index=True)
+    author = db.Column(db.String, index=True)
+    publication_date = db.Column(db.String, index=True)
+    description = db.Column(db.String, index=True)
+    users = db.relationship('Read', back_populates='book', index=True) 
+    keywords = db.relationship('Book_keyword', back_populates='book', index=True)
 
     def __repr__(self):
         return '<Book %r>' % self.title
