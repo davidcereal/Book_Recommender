@@ -3,7 +3,7 @@ Bookoloy is a web-app that allows users to get recommendations by mixing and mat
 
  The web app is built on flask and is configured to use an SQLite database, with Alembic for the migrations. Login and registration is included, along with social login (google and facebook) options. 
 
-The app's recommendations are delivered on a basis of collaborative and content-based filtering. To achieve the collaborative filtering, the ratings for 160,000 users and 50,000 books were processed using an SVD to extract the latent features. The recommendations are further filtered by mapping the keywords users associated a book using an unsupervised KNeighbors model to determine distance from the user's input. Lastly, books that are very popular among all users are penalized, allowing for greater specificity in the results. Users are given the option of up-voting and down-voting the suggestions, and this feedback updates the collaborative filtering input. 
+The app's recommendations are delivered on a basis of collaborative and content-based filtering. To achieve the collaborative filtering, the ratings for 160,000 users and 50,000 books were processed using an SVD to extract the latent features. The recommendations are further filtered by mapping the keywords users associated a book using an unsupervised KNeighbors model to determine distance from the user's input. Lastly, books that are very popular among all users are penalized, allowing for greater specificity in the results. Users are given the option of up-voting and down-voting the suggestions, and this feedback updates the collaborative filtering output. 
 
 
 ## 1. Clone the repository
