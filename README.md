@@ -6,11 +6,11 @@ Bookoloy is a web-app that allows users to get recommendations by mixing and mat
 The app's recommendations are delivered on a basis of collaborative and content-based filtering. To achieve the collaborative filtering, the ratings for 160,000 users and 50,000 books were processed using an SVD to extract the latent features. The recommendations are further filtered by mapping the keywords users associated a book using an unsupervised KNeighbors model to determine distance from the user's input. Lastly, books that are very popular among all users are penalized, allowing for greater specificity in the results. Users are given the option of up-voting and down-voting the suggestions, and this feedback updates the collaborative filtering output. 
 
 
-## 1. Clone the repository
+## Clone the repository
 
 ```$ git clone https://github.com/dberger1989/Book_Recommender.git```
 
-## 2. Setup
+## Setup
 
 This code is portable across the following OS's: Linux distributions, Mac and Windows OS's. Scripts were written using Python 2.7 and have not been tested for portability to Python 3.X.
 
@@ -60,6 +60,22 @@ You are encouraged to use a python virtual environment using virtualenv and pip.
 * Werkzeug==0.11.9 - Werkzeug is a WSGI utility library for Python
 * Whoosh==2.7.4 - Whoosh is a fast, featureful full-text indexing and searching library implemented in pure Python.
 * WTForms==2.1
+
+## App structure
+
+### Blueprints
+
+This app utilizes 3 blueprints created upon instantiation:
+* main - handles the basic views of the site
+* auth - handles views of the site relevant to registartion and login
+* recommender - handles views relevant to generating recommendations
+
+### SQL
+
+* The default configuration of the app is to use SQLite, but my altering the config file, it can easily be altered. 
+* In-app interaction between the views of the app and the database occurs through SQLAlchemy. 
+
+
 
 
 
