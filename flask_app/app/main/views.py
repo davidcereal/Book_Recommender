@@ -88,6 +88,7 @@ def library():
     print 'library route accessed'
     return render_template('library.html', current_user = g.user, db=db, Book=Book)
 
+
 @main.route('/delete_read', methods=['GET', 'POST'])
 @login_required
 def delete_read():
@@ -101,5 +102,8 @@ def delete_read():
     book_deleted = {'book deleted': read_record.book_id}
     return jsonify(book_deleted)
 
+@main.route('/about', methods=['GET', 'POST'])
+def about():
+    return render_template('about.html')
 
 

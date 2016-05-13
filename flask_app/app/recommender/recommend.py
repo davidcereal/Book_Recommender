@@ -465,4 +465,4 @@ class Recommend(object):
         return recommended_books[:6]
 
 if __name__ == "__main__":
-    Recommend().main()
+    Model().main()

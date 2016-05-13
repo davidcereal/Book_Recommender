@@ -23,7 +23,7 @@
       <li><a href="{{ url_for('main.library') }}">My Library</a></li>
       <li><a href="{{ url_for('main.search') }}">Add Books</a></li>
       <li><a href="{{ url_for('recommender.recommendations') }}">Recommendations</a></li>
-      <li><a href="#">About</a></li>
+      <li><a href="{{ url_for('main.about') }}">About</a></li>
 
 
       {% if current_user.is_authenticated %}

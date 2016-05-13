@@ -96,37 +96,6 @@ def get_facebook_oauth_token():
     return session.get('facebook_oauth_token')
 
 
-
-@auth.route('/login', methods=['GET', 'POST']) 
-@oid.loginhandler
-def login():
-    form = LoginForm()
-    openid_form = OpenIDForm()
-    if openid_form.validate_on_submit():
-        return oid.try_login(
-            openid_form.openid.data,
-            ask_for=['email'],
-            #ask_for_optional=['first_name']
-            )
-    if form.register.data:
-        return redirect(url_for('auth.register'))
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is not None and user.verify_password(form.password.data):
-            login_user(user, form.remember_me.data)
-            #return redirect(request.args.get('next') 
-            flash("You have been logged in.", category="success")
-            return redirect(url_for('recommender.recommendations'))
-        flash('Invalid username or password.')
-
-    openid_errors = oid.fetch_error()
-    if openid_errors:
-        flash(openid_errors, category="danger")
-
-    print form.errors
-    return render_template('auth/login.html', form=form, openid_form=openid_form)
-
-
 @auth.route('/facebook')
 def facebook_login():
     form = LoginForm()
@@ -138,8 +107,6 @@ def facebook_login():
             form=form
         )
     )
-
-
 
 @auth.route('/facebook/authorized')
 @facebook.authorized_handler
@@ -172,6 +139,34 @@ def facebook_authorized(resp):
 
 
 
+@auth.route('/login', methods=['GET', 'POST']) 
+@oid.loginhandler
+def login():
+    form = LoginForm()
+    openid_form = OpenIDForm()
+    if openid_form.validate_on_submit():
+        return oid.try_login(
+            openid_form.openid.data,
+            ask_for=['email'],
+            #ask_for_optional=['first_name']
+            )
+    if form.register.data:
+        return redirect(url_for('auth.register'))
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user is not None and user.verify_password(form.password.data):
+            login_user(user, form.remember_me.data)
+            #return redirect(request.args.get('next') 
+            flash("You have been logged in.", category="success")
+            return redirect(url_for('recommender.recommendations'))
+        flash('Invalid username or password.')
+
+    openid_errors = oid.fetch_error()
+    if openid_errors:
+        flash(openid_errors, category="danger")
+
+    return render_template('auth/login.html', form=form, openid_form=openid_form)
+
 
 @auth.route('/logout') 
 @login_required
@@ -182,7 +177,6 @@ def logout():
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
-    print 'accessed the register route'
     form = RegistrationForm()
     openid_form = OpenIDForm()
 
@@ -194,7 +188,6 @@ def register():
         )
 
     if form.validate_on_submit():
-        print 'validated!!!!!!!!'
         user = User(email=form.email.data,
                     name = form.name.data,
                     password = form.password1.data)
@@ -207,6 +200,5 @@ def register():
         flash(openid_errors, category="danger")
 
 
-    print form.errors
     return render_template('auth/register.html', form=form, openid_form=openid_form)
     
