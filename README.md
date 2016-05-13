@@ -72,8 +72,9 @@ This app utilizes 3 blueprints created upon instantiation:
 
 ### SQL
 
-* The default configuration of the app is to use SQLite, but my altering the config file, it can easily be altered. 
-* In-app interaction between the views of the app and the database occurs through SQLAlchemy. 
+* The default configuration of the app is to use SQLite, but my altering the config file, it can easily be altered
+* In-app interaction between the views of the app and the database is fascilitated by SQLAlchemy
+* Miigration managent is fascilitated by Alembic, designed for use with SQLAchemy 
 
 
 
