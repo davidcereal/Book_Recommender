@@ -1,7 +1,12 @@
 .backgroundContainer{
-	background: url("https://upload.wikimedia.org/wikipedia/commons/2/2b/Bookshelf.jpg") no-repeat center;
+	background: url("../html_images/Bookshelf.jpg") no-repeat center;
 	height: 940px;
 }
+
+.socialLoginButton{
+	height:38.5px;
+}
+
 
 .search_result_cover {
 	max-height: 150px;
@@ -69,6 +74,11 @@ input[type="checkbox"] {
 .resultCover{
 	cursor:pointer;
 	height:210px;
+
+}
+
+.resultCover:hover{
+    transition-delay:1s;
 }
 
 .upVote{
