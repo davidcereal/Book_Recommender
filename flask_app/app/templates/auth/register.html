@@ -8,32 +8,33 @@
   <div class="login-box">
     <form method="POST" action="">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-      <div class="row align-center">
+      <div class="row">
              {{form.email(placeholder="Email Address")}}
              {% for error in form.email.errors %}
             <div class ="errorDiv" style="color: red;" >{{ error }}</div>
-          {% endfor %}<br>
+          {% endfor %}
        </div>
-      <div class="row align-center">
+      <div class="row">
              {{form.name(placeholder="Name")}}
       </div>
-      <div class="row align-center">
+      <div class="row">
              {{form.password1(placeholder="Password")}}
              {% for error in form.password1.errors %}
             <div class ="errorDiv" style="color: red;" >{{ error }}</div>
-          {% endfor %}<br>
+          {% endfor %}
       </div>
-      <div class="row align-center">
+      <div class="row">
              {{form.password2(placeholder="Confirm Password")}}
              {% for error in form.password2.errors %}
             <div class ="errorDiv" style="color: red;" >{{ error }}</div>
-          {% endfor %}<br>
+          {% endfor %}
       </div>
 
       <div class="row align-left">
               {{ form.recaptcha }}
 
       </div>
+      <br>
       <div class="row align-left">
               {{form.register(class="expanded button")}}
       </div>
