@@ -8,9 +8,16 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
       <div class="row align-center">
       {{form.email(placeholder="login")}}
+
+          {% for error in form.email.errors %}
+            <div class ="errorDiv" style="color: red;" >{{ error }}</div>
+          {% endfor %}
+          <br>
+
        </div>
       <div class="row align-center">
       {{form.password(placeholder="password")}}
+
       </div>
       <div class="row align-left">
       {{form.submit_login(class="expanded button")}}

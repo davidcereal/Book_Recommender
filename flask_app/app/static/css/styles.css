@@ -7,6 +7,9 @@
 	height:38.5px;
 }
 
+.errorDiv{
+	margin-top:-15px;
+}
 
 .search_result_cover {
 	max-height: 150px;

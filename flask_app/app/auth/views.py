@@ -123,7 +123,8 @@ def login():
     if openid_errors:
         flash(openid_errors, category="danger")
 
-    return render_template('auth/login.html', form=LoginForm(), openid_form=openid_form)
+    print form.errors
+    return render_template('auth/login.html', form=form, openid_form=openid_form)
 
 
 @auth.route('/facebook')
