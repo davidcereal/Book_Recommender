@@ -14,7 +14,7 @@ class OpenIDForm(Form):
     openid = StringField('OpenID URL', [DataRequired(), URL()])
 
 class LoginForm(Form):
-    email = StringField('Email', validators=[Required(), Length(1,64), Email()])
+    email = StringField('Email', validators=[Required(), Length(1,64), Email(message='Valid email address required')])
     password = PasswordField('Password', validators = [Required()])
     remember_me = BooleanField('Keep me logged in')
     submit_login = SubmitField('Log In')
@@ -23,11 +23,11 @@ class LoginForm(Form):
 
 class RegistrationForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
-                                             Email()])
+                                             Email(message='Valid email address required')])
     name = StringField('Name', validators= [Required(), Length(1, 64)])
     #last_name = String(Field('Last Name'), validators= [Length(1, 64)])
     password1 = PasswordField('Password', validators=[Required(), 
-                                                    Length(min=8)])
+                                                    Length(min=8, message='Password must be at least 8 characters long')])
     password2 = PasswordField('Confirm password', validators=[Required(), 
                                                             EqualTo('password1', message='Passwords must match.')])
     recaptcha = RecaptchaField()
