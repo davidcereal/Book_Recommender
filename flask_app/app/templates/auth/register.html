@@ -17,7 +17,14 @@
        </div>
       <div class="row">
              {{form.name(placeholder="Name")}}
+             {% for error in form.name.errors %}
+              <div class="errorDiv">
+                <small class="error">{{error}}</small>
+              </div> 
+            {% endfor %}
+
       </div>
+
       <div class="row">
              {{form.password1(placeholder="Password")}}
              {% for error in form.password1.errors %}

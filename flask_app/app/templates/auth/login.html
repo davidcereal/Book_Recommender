@@ -11,11 +11,7 @@
       {{form.email(placeholder="login")}}
        </div>
         
-        {% for error in form.email.errors %}
-      <div class="errorDiv">
-        <small class="error">{{error}}</small>
-      </div>  
-      {% endfor %}
+        
       <div class="row">
       {{form.password(placeholder="password")}}
 
@@ -23,6 +19,19 @@
       <div class="row align-left">
       {{form.submit_login(class="expanded button")}}
       </div>
+        
+      {% for error in form.email.errors %}
+      <div class="errorDiv">
+        <small class="error">{{error}}</small>
+      </div>  
+      {% endfor %}
+        
+      {% for error in form.password.errors %}
+      <div class="errorDiv">
+        <small class="error">{{error}}</small>
+      </div>  
+      {% endfor %}
+
       <div class="row align-center">
           {{form.register(class="expanded alert button")}}
       </div>

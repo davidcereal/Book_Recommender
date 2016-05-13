@@ -1,14 +1,17 @@
-.backgroundContainer{
+.backgroundContainer {
 	background: url("../html_images/Bookshelf.jpg") no-repeat center;
 	height: 940px;
 }
 
 
-.socialLoginButton{
+.socialLoginButton {
 	height:38.5px;
 }
+.error {
+	color:red;
+}
 
-.errorDiv{
+.errorDiv {
 	margin-top:-15px;
 	margin-bottom:10px;
 }

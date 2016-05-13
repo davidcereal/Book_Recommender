@@ -20,6 +20,30 @@ class LoginForm(Form):
     submit_login = SubmitField('Log In')
     register = SubmitField('Sign Up')
 
+    def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
+        self.user = None
+
+
+    def validate(self):
+        rv = Form.validate(self)
+        if not rv:
+            return False
+
+        user = User.query.filter_by(
+            email=self.email.data).first()
+
+        if user is None:
+            self.email.errors.append('Email address does not belong to registered user')
+            return False
+
+        if not user.verify_password(self.password.data):
+            self.password.errors.append('Invalid password')
+            return False
+
+        self.user = user
+        return True
+
 
 class RegistrationForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
@@ -33,10 +57,19 @@ class RegistrationForm(Form):
     recaptcha = RecaptchaField()
     register = SubmitField('Register')
 
-
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('That email address is already registered.')
+
+    
+
+
+'''    def validate(self):
+        print 'validate user accessed'
+        user = User.query.filter_by(email=field.data).first()
+        if user is not None and user.verify_password(field.data):
+            print 'invalid user!'
+            raise ValidationError('Invalid username/password combination')'''
 
 class SearchForm(Form):
     search = StringField('search', validators=[DataRequired()])
