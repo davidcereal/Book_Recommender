@@ -81,8 +81,21 @@ input[type="checkbox"] {
 	width: 100px;
 
 }
-.featuresLabel{
+.featureSelect{
+	width: 200px;
 
+}
+
+.feature{
+	margin-left: 200px;
+
+}
+
+.removeFeatureButton{
+	position:absolute; 
+	margin-left:205px;
+	margin-top:8px;
+	width:20px;
 }
 
 .featureBox {

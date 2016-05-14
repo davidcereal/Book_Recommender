@@ -27,8 +27,12 @@
 <div class="row">
 
 <div class="small-3 column" id="selectBox1">
+<div class="row" id="selectRow">
+  <img class="removeFeatureButton" src="static/html_images/remove_button.svg" onclick=removeFeature(this) id="removeButton">
+
   <label>
-    <select class="featureSelect" id='selectedValue'>
+    <select class="featureSelect" id='selectedValue' >
+
       <option class="feature" id="cb1" value="blank">Select a Feature</option>
       <option class="feature" id="cb1" value="adventure">Adventure</option>
       <option class="feature" id="cb2" value="biography">Biography</option>
@@ -51,6 +55,7 @@
       <option class="feature" id="cb19" value="young_adult">Young Adult</option>
     </select>
   </label>
+  </div>
 </div>
 
 
@@ -96,8 +101,11 @@
 </script>
 
 <script id="featureScript">
+  <div class="row">
+  <img class="removeFeatureButton" src="static/html_images/remove_button.svg" onclick=removeFeature(this)>
+
   <label>
-    <select class="featureSelect" id='selectedValue'>
+    <select class="featureSelect" id='selectedValue' >
       <option class="feature" id="cb1" value="blank">Select a Feature</option>
       <option class="feature" id="cb1" value="adventure">Adventure</option>
       <option class="feature" id="cb2" value="biography">Biography</option>
@@ -120,6 +128,7 @@
       <option class="feature" id="cb19" value="young_adult">Young Adult</option>
     </select>
   </label>
+  </div>
 </script>
 
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -180,9 +189,23 @@ $(document).ready(function ()  {
     });
   });
 
+function removeFeature(ele){
+  var select = ele.parentNode.querySelector(".featureSelect")
+  alert(select)
+  // Change selected option
+  $(select).val('blank');
+  // Or use selectedIndex: $("#selectboxID")[0].selectedIndex = 0;
+
+  // Fire change event
+  $(select).trigger('change');
+  select.click()
+
+
+}
+
 function selectFeature(){
      if(this.id !== this.value){
-     var column = this.parentNode.parentNode
+     var column = this.parentNode.parentNode.parentNode
      var row = column.parentNode
     if (this.value !== 'blank'){
       if (this.id !== 'selectedValue') {
@@ -217,7 +240,7 @@ function selectFeature(){
       downVoted = []
       booksReturned = [];
       recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned);
-      if (($(row).children().length > 2 &&  $(row).children().length > featureSelections.length+1)
+      if (($(row).children().length > 1 &&  $(row).children().length > featureSelections.length+1)
           ){
       row.removeChild(column)
       nFeatureContainers = nFeatureContainers - 1 
