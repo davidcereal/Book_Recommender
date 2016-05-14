@@ -2,11 +2,20 @@
 	background: url("../html_images/Bookshelf.jpg") no-repeat center;
 	height: 940px;
 }
-
+.login-box{
+	margin-top:200px;
+	background-color: rgba(255, 255, 255, 0.8)
+}
 
 .socialLoginButton {
 	height:38.5px;
 }
+
+.socialLoginButton:hover {
+	background-color: black;
+	opacity: .2;
+}
+
 .error {
 	color:red;
 }
@@ -41,8 +50,8 @@
 
 .recCover{
 	cursor:pointer;
-	height:205px;
-	width: 135px;
+	height:175px;
+	width: 110px;
 }
 
 
@@ -67,9 +76,12 @@ input[type="checkbox"] {
 }
 
 .recLibrary {
-	height: 300px;
+	height: 280px;
 	overflow:scroll;
 	width: 100px;
+
+}
+.featuresLabel{
 
 }
 
@@ -91,11 +103,14 @@ input[type="checkbox"] {
 
 .upVote{
 	height:25px;
-
+	cursor:pointer;
 }
 
 .downVote{
 	height:25px;
+	cursor:pointer;
+
+}
 
 	
 
