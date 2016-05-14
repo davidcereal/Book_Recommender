@@ -28,7 +28,7 @@
 
 <div class="small-3 column" id="selectBox1">
 <div class="row" id="selectRow">
-  <img class="removeFeatureButton" src="static/html_images/remove_button.svg" onclick=removeFeature(this) id="removeButton">
+  <img class="removeFeatureButton" onclick=removeFeature(this) id="removeButton">
 
   <label>
     <select class="featureSelect" id='selectedValue' >
@@ -102,7 +102,7 @@
 
 <script id="featureScript">
   <div class="row">
-  <img class="removeFeatureButton" src="static/html_images/remove_button.svg" onclick=removeFeature(this)>
+  <img class="removeFeatureButton"  onclick=removeFeature(this)>
 
   <label>
     <select class="featureSelect" id='selectedValue' >
@@ -191,7 +191,6 @@ $(document).ready(function ()  {
 
 function removeFeature(ele){
   var select = ele.parentNode.querySelector(".featureSelect")
-  alert(select)
   // Change selected option
   $(select).val('blank');
   // Or use selectedIndex: $("#selectboxID")[0].selectedIndex = 0;
@@ -212,7 +211,8 @@ function selectFeature(){
           var oldFeature = this.id
           var index = featureSelections.indexOf(oldFeature);
           featureSelections.splice(index, 1)};
-      
+      var img = this.parentNode.parentNode.querySelector('.removeFeatureButton')
+      img.src = "static/html_images/remove_button.svg"
       var feature = this.value
       featureSelections.push(feature);
       upVoted = []
@@ -381,7 +381,6 @@ $(document).ready(function ()  {
 
 
 function recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned){
-  alert(featureSelections)
       $.ajaxSetup({
             headers:
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
