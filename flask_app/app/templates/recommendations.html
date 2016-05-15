@@ -225,7 +225,8 @@ function selectFeature(){
         newColumn.className = "small-3 columns"
         newColumn.innerHTML = document.getElementById('featureScript').innerHTML;
       $(newColumn).on("click", ".featureSelect", selectFeature);
-      row.appendChild(newColumn)
+      row.insertBefore(newColumn, row.firstChild);
+      //row.appendChild(newColumn)
         };
       this.id = this.value
 
@@ -423,10 +424,10 @@ function showResults(recommendations){
   prevDiv.innerHTML = ''
   nextDiv.innerHTML = ''
   if (booksReturned < 7){
-    var buttonClass = 'button small disabled'
+    var buttonClass = 'button medium disabled'
   }
   else {
-    var buttonClass = 'button small'
+    var buttonClass = 'button medium'
   };
   $('<a/>', {
     'id':'prevButton',
@@ -438,8 +439,8 @@ function showResults(recommendations){
 
     $('<a/>', {
     'id':'nextButton',
-    'class':'button small',
-    'text':'view more',
+    'class':'button medium',
+    'text':'get more',
     'style':'float:right; font-weight:bold;',
     'onclick': 'recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned)'
     }).appendTo(nextDiv);
