@@ -39,7 +39,7 @@ def get_book_info(book_id, book_data):
 
 
 class Recommend(object):
-    def __init__(self, user, Read, Book, book_data, db, ipca_model, dict_vectorizer_fit, n_collab_returned):
+    def __init__(self, user, Read, Book, book_data, db, ipca_model, dict_vectorizer_fit):
         self.user = user
         self.Read = Read
         self.Book = Book
@@ -47,9 +47,9 @@ class Recommend(object):
         self.db = db
         self.ipca_model = ipca_model
         self.dict_vectorizer_fit = dict_vectorizer_fit
-        self.n_collab_returned = n_collab_returned
+        #self.n_collab_returned = n_collab_returned
 
-    def recommend_books(self, books_selected, features_list, books_returned, up_votes, down_votes):
+    def recommend_books(self, books_selected, features_list, books_returned, up_votes, down_votes, n_collab_returned=1000):
         """
         Function to run collaborative filtering and book-keyword similarity and return recommendations
         """
@@ -140,7 +140,7 @@ class Recommend(object):
                 user_authors_list.append(author)
         return user_authors_list
 
-    def return_top_n_books(self, filled_enduser_ratings, book_names, read_authors_list):
+    def return_top_n_books(self, filled_enduser_ratings, book_names, read_authors_list, n_collab_returned):
         """
         Return the top n number of books from the ipca model results.
 
@@ -157,7 +157,8 @@ class Recommend(object):
         ## Attach book names to the results
         results = sorted(zip(book_names, filled_enduser_ratings), key = lambda x: x[1], reverse=True)
         collab_filter_results = []
-        for item in results[:self.n_collab_returned]:
+        ## Return results in 1000 book increments. 
+        for item in results[n_collab_returned-1000:self.n_collab_returned]:
             book_id = item[0]
             if self.book_data.has_key(book_id):
                 if self.book_data[book_id].has_key('author'):
@@ -198,7 +199,7 @@ class Recommend(object):
         user_authors_list = self.create_user_authors_list(books_selected)
         
         ## Return the books the end-user is most likely to rate highest
-        collab_filter_results = self.return_top_n_books(filled_enduser_ratings, book_names, user_authors_list)
+        collab_filter_results = self.return_top_n_books(filled_enduser_ratings, book_names, user_authors_list, n_collab_returned)
         return collab_filter_results
 
     
@@ -450,6 +451,10 @@ class Recommend(object):
 
         ## Determine distance from neighbors
         book_nearest_neighbors = book_neigh.kneighbors(enduser_series, return_distance=True)
+
+        if None in book_nearest_neighbors:
+            return recommend_books(self, books_selected, features_list, books_returned, up_votes, down_votes, n_collab_returned+1000)
+
         
         ## Put neighbors in list
         neighbors = np.ndarray.tolist(book_nearest_neighbors[1])[0]
