@@ -1,1 +1,0 @@
-from flask_app.config.config import *
