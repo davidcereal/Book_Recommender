@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from flask.ext.wtf import Form
 from flask.ext.moment import Moment
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask_app import config
+from flask_app.config import config
 from flask.ext.login import LoginManager
 from flask import Blueprint
 from flask_wtf.csrf import CsrfProtect
@@ -20,6 +20,7 @@ csrf = CsrfProtect()
 
 def create_app(config_name):
 	app = Flask(__name__)
+	print config
 	app.config.from_object(config[config_name])
 	config[config_name].init_app(app)
 
