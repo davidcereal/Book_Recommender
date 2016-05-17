@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, "/flask_app")
+sys.path.insert(0, "/flask_app/")
 
 from app import create_app 
 
