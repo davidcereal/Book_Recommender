@@ -10,6 +10,7 @@ import flask.ext.whooshalchemy
 app = create_app(os.getenv('FLASK_CONFIG') or 'default') 
 manager = Manager(app)
 migrate = Migrate(app, db)
+application = create_app(os.getenv('FLASK_CONFIG') or 'default') 
 
 flask.ext.whooshalchemy.whoosh_index(app, Book)
 
