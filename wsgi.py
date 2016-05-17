@@ -1,5 +1,5 @@
-#import sys
-#sys.path.insert(0, "/flask_app/")
+import sys
+sys.path.insert(0, "/")
 
 from flask_app.app import create_app
 

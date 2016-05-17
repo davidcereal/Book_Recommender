@@ -1,1 +1,1 @@
-from config import *
+from flask_app.config.config import *
