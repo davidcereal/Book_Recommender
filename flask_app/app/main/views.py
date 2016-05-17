@@ -6,7 +6,7 @@ from ..models import User, Book, Read
 from ..auth.forms import LoginForm, RegistrationForm, SearchForm
 from .. import auth
 from flask.ext.login import login_required, current_user
-from config import Config
+from flask_app.config import Config
 from flask_wtf.csrf import CsrfProtect
 import os
 

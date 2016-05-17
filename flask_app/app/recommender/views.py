@@ -2,7 +2,7 @@ from flask import render_template, session, redirect, url_for, g, request, jsoni
 from . import recommender
 from .. import db
 from ..models import User, Book, Read
-from config import Config
+from flask_app.config import Config
 from flask.ext.login import login_required, current_user
 from flask_wtf.csrf import CsrfProtect
 from recommend import Recommend, format_keywords_for_d3, get_book_info

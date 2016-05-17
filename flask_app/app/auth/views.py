@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, url_for, flash, session
 from flask.ext.login import login_user
 from . import auth
 
-from config import Config
+from flask_app.config import Config
 
 from ..models import User
 from .forms import LoginForm, RegistrationForm, SearchForm, OpenIDForm
