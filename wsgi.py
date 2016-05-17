@@ -1,9 +1,8 @@
 #import sys
 #sys.path.insert(0, "/flask_app/")
 
-from flask_app.app import config 
-from flask_app.app import create_app
- 
+from flask_app.app import *
+
 
 application = create_app('default') 
 
