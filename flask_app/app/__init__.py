@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from flask.ext.wtf import Form
 from flask.ext.moment import Moment
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask_app.config import config
+from flask_app.config import *
 from flask.ext.login import LoginManager
 from flask import Blueprint
 from flask_wtf.csrf import CsrfProtect
