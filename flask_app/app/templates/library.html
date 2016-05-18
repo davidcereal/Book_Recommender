@@ -20,8 +20,8 @@
  </div>
 
 
-<script src="../static/js/vendor/rating.min.js"></script>
-<script src="../static/js/vendor/rating_script.js"></script>
+<script src= "{{ url_for('static', filename="js/vendor/rating.min.js") }}"></script>
+<script src= "{{ url_for('static', filename="js/vendor/rating_script.js") }}"></script>
 
 <script>
 
@@ -138,8 +138,7 @@ function removeBook(book_info){
 
 {% block scripts %}
 {{ super() }}
-<script src="../static/js/vendor/rating.min.js"></script>
-<script src="../static/js/rating_script.js"></script>
+
 
 
 

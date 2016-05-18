@@ -1,0 +1,1 @@
+aws s3 sync ./br_sync/recommender_data s3://elasticbeanstalk-us-east-1-466073256431/Book_Recommender/flask_app/app/

@@ -5,12 +5,15 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NextRead</title>
-    <link rel="stylesheet" href="/static/css/foundation.css">
-    <link rel="stylesheet" href="/static/css/app.css">
-    <link rel="stylesheet" href="/static/css/styles.css">
-    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/static/css/style.min.css">
-    <link rel="stylesheet" href="/static/css/rating.min.css">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/foundation.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/app.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/styles.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/font-awesome.min.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/style.min.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/rating.min.css") }}">
+
+
   </head>
   
   <body background="https://upload.wikimedia.org/wikipedia/commons/2/2b/Bookshelf.jpg">
@@ -39,11 +42,12 @@
 
 
 
-    <script src="../static/js/vendor/jquery.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-    <script src="../static/js/vendor/what-input.js"></script>
-    <script src="../static/js/vendor/foundation.js"></script>
-    <script src="../static/js/app.js"></script>
+    <script src= "{{ url_for('static', filename="js/vendor/jquery.js") }}"></script>
+    <script src= "{{ url_for('static', filename="js/vendor/what-input.js") }}"></script>
+    <script src= "{{ url_for('static', filename="js/vendor/foundation.js") }}"></script>
+    <script src= "{{ url_for('static', filename="js/app.js") }}"></script>
+
+
 
 
 

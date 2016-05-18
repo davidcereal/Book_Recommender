@@ -92,10 +92,10 @@
   <img class="resultCover"/>
   <div class="row" id="votes">
     <div class="small-2 columns" id="upVoteDiv" style="padding-left:55px;">
-      <img class="upVote" src="/static/html_images/thumbs_up_1.jpg">
+      <img class="upVote" src="{{url_for('static', filename='html_images/thumbs_up_1.jpg')}}">
     </div>
     <div class="small-2 columns" id="downVoteDiv">
-      <img class="downVote" src="/static/html_images/thumbs_down_1.jpg">
+      <img class="downVote" src="{{url_for('static', filename='html_images/thumbs_down_1.jpg')}}">
     </div>
   </div>
 </script>
@@ -132,10 +132,9 @@
 </script>
 
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="../static/js/vendor/rating.min.js"></script>
-<script src="../static/js/vendor/rating_script.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="../static/js/d3_models.js"></script>
+<script src= "{{ url_for('static', filename="js/d3_models.js") }}"></script>
+
 
 
 
@@ -276,19 +275,19 @@ $(document).ready(function ()  {
       if ($.inArray(webId, downVoted) > -1){
         var index = downVoted.indexOf(webId);
         downVoted.splice(index, 1);
-        downVote.src = "/static/html_images/thumbs_down_1.jpg";
+        downVote.src = "{{url_for('static', filename='html_images/thumbs_down_1.jpg')}}";
         downVote.className = 'downVote';  
       }
 
       if (this.className.substring(7) == "Cl"){
         upVoted.push(webId);
-        this.src = "/static/html_images/thumbs_up_2.jpg";      
+        this.src = "{{url_for('static', filename='html_images/thumbs_up_2.jpg')}}";      
       }
 
       else {
         var index = upVoted.indexOf(webId);
         upVoted.splice(index, 1);
-        this.src = "/static/html_images/thumbs_up_1.jpg"
+        this.src = "{{url_for('static', filename='html_images/thumbs_up_1.jpg')}}"
       };
       
  
@@ -307,18 +306,18 @@ $(document).ready(function ()  {
       if ($.inArray(webId, upVoted) > -1){
         var index = upVoted.indexOf(webId);
         upVoted.splice(index, 1);
-        upVote.src = "/static/html_images/thumbs_up_1.jpg";
+        upVote.src = "{{url_for('static', filename='html_images/thumbs_up_1.jpg')}}";
         upVote.className = 'upVote';  
       }
 
       if (this.className.substring(9) == "Cl"){
         downVoted.push(webId)
-        this.src = "/static/html_images/thumbs_down_2.jpg"      
+        this.src = "{{url_for('static', filename='html_images/thumbs_down_2.jpg')}}";      
       }
       else {
         var index = downVoted.indexOf(webId)
         downVoted.splice(index, 1);
-        this.src = "/static/html_images/thumbs_down_1.jpg"
+        this.src = "{{url_for('static', filename='html_images/thumbs_down_1.jpg')}}"
       };
   
     });
@@ -458,7 +457,7 @@ function showResults(recommendations){
       popup.open()
     };
 
-    var imgSrc_beg = "{{url_for('main.download_file', filename='')}}";
+    var imgSrc_beg = "{{url_for('static', filename='book_covers/')}}";
     var imgSrc_end = recommendations[i] + '.jpg';
     img.src = imgSrc_beg + imgSrc_end;
     var upVote = result.querySelector(".upVote");
@@ -542,8 +541,7 @@ function showResults(recommendations){
 
 {% block scripts %}
 {{ super() }}
-<script src="../static/js/vendor/rating.min.js"></script>
-<script src="../static/js/rating_script.js"></script>
+
 
 
 

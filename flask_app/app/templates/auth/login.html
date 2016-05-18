@@ -41,12 +41,12 @@
       <div class="row align-justify" style="padding-bottom:20px;">
           <div class="shrink columns" style="margin-right:-10px; margin-left:-15px">
             <a href="{{ url_for('auth.facebook_login') }}" >
-              <img class="socialLoginButton" src="../static/html_images/facebook_login_medium.svg" >
+              <img class="socialLoginButton" src="{{ url_for('static', filename="html_images/facebook_login_medium.svg") }}">
             </a>
           </div>
           <div  class="shrink columns" style="margin-left:-10px; margin-right:-15px;">
               <a href="{{ url_for('auth.google_login') }}" >
-              <img class="socialLoginButton" src="../static/html_images/google_login_medium.svg" >
+              <img class="socialLoginButton" src="{{ url_for('static', filename="html_images/google_login_medium.svg") }}" >
             </a>
           </div>
       </div>

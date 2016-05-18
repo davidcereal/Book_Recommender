@@ -9,7 +9,6 @@
 test/*
 
 add_books_to_db.py
-config.py
 
 /whoosh_index_test
 /whoosh_index_test/

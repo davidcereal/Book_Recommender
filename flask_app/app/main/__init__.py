@@ -1,4 +1,5 @@
-from flask import Blueprint
+from flask import Blueprint, url_for
+
 
 main = Blueprint('main', __name__) 
 

@@ -2,12 +2,12 @@ from flask import render_template, session, redirect, url_for, g, request, jsoni
 from . import recommender
 from .. import db
 from ..models import User, Book, Read
-from flask_app.config import Config
+from flask_app.config import Config, config
 from flask.ext.login import login_required, current_user
 from flask_wtf.csrf import CsrfProtect
 from recommend import Recommend, format_keywords_for_d3, get_book_info
-import recommendation_data
-from recommendation_data import book_data, dict_vectorizer_fit, ipca_model
+import recommender_data
+from recommender_data import book_data, dict_vectorizer_fit, ipca_model
 import os
 
 
@@ -35,13 +35,13 @@ def results():
     g.books_returned = g.data['books_returned']
     g.Recommend = Recommend(user=g.user, db=db, Read=Read, Book=Book,
                             book_data=book_data, ipca_model=ipca_model, 
-                            dict_vectorizer_fit=dict_vectorizer_fit, 
-                            n_collab_returned=1000)
+                            dict_vectorizer_fit=dict_vectorizer_fit)
     g.recommended_books = g.Recommend.recommend_books(books_selected=g.books_selected, 
                                                       features_list=g.features_list, 
                                                       books_returned=g.books_returned,
                                                       up_votes=g.up_voted, 
-                                                      down_votes=g.down_voted)
+                                                      down_votes=g.down_voted,
+                                                      n_collab_returned=1000)
     rec_data = {"recommendations": g.recommended_books}
     return jsonify(rec_data)
 

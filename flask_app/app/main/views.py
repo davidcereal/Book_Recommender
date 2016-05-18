@@ -9,6 +9,7 @@ from flask.ext.login import login_required, current_user
 from flask_app.config import Config
 from flask_wtf.csrf import CsrfProtect
 import os
+import pickle
 
 COVERS_FOLDER = Config.COVERS_FOLDER
 
@@ -36,6 +37,7 @@ def before_request():
 @main.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
+    print url_for('static', filename="js/vendor/jquery.js")
     form = SearchForm()
     if form.search.data:
         session['query'] = g.search_form.search.data
