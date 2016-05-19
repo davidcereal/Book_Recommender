@@ -59,10 +59,12 @@ def rating():
 
     book = db.session.query(Book).filter(Book.web_id==data['rating'][0]).first()
 
-    book_read = Read(user=g.user, book=book, rating=rating)
+    book_read = Read(user=g.user.id, book=book, rating=rating)
+    print 'book read add'
+    print book_read
     db.session.add(book_read)
     db.session.commit()
-    print book.title
+    print 'book {} added'.format(book.title)
     book_rating = {"book rated": [book.title]}
     return jsonify(book_rating)
 
@@ -80,10 +82,12 @@ def delete_read():
     #print "data:{}".format(data)
     book_id = data['book_info'][0]
     book = db.session.query(Book).filter(Book.web_id==book_id).first()
-    read_record = db.session.query(Read).filter_by(book=book, user_id=current_user.id).first()
-    #print read_record
+    read_record = db.session.query(Read).filter_by(book=book, user_id=g.user.id).first()
+    print 'read record delete:'
+    print read_record
     db.session.delete(read_record)
     db.session.commit()
+    print 'book {} deleted'.format(book.title)
     book_deleted = {'book deleted': read_record.book_id}
     return jsonify(book_deleted)
 
