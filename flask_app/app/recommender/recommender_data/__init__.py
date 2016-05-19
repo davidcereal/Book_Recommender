@@ -24,7 +24,7 @@ ipca_model_path = os.path.join(scriptdir, "ipca_160k_nc50_bs500.pkl")
 
 
 
-if Config.DEBUG == False and Config.LOCAL == True:
+if Config.LOCAL == False:
 	s3 = boto3.client('s3')
 
 	s3.download_file("brstatic", "static/recommender_data/dict_vectorizer_fit_160k_top_50k_books_duplicates_removed_user_data.pkl", DV_fit_path)
