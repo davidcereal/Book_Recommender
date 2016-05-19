@@ -43,7 +43,6 @@ def results():
                                                       down_votes=g.down_voted,
                                                       n_collab_returned=1000)
     rec_data = {"recommendations": g.recommended_books}
-    print 'books returned: {}'.format(g.books_returned)
     return jsonify(rec_data)
 
 # Get user books and features input and return recommendations 
@@ -51,9 +50,7 @@ def results():
 @login_required
 def keywords_to_d3():
     g.data = request.json
-    print g.data
     g.book_id = g.data["book_id"][0]
-    print 'g.book_id: {}'.format(g.book_id)
     g.book_keywords = book_data[g.book_id]['keywords']
     g.d3_keywords = format_keywords_for_d3(g.book_keywords)
     g.book_info = get_book_info(g.book_id, book_data)

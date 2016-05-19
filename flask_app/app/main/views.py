@@ -41,9 +41,6 @@ def search():
 @login_required
 def search_results(query):
     results = Book.query.whoosh_search(query, Config.MAX_SEARCH_RESULTS).all()
-    print 'results!!!!!!!!!!'
-    print 'results!!!!!!!!!!'
-    print results
     for book in results:
         if book in current_user.books_read:
             print True
