@@ -11,12 +11,6 @@ from flask_wtf.csrf import CsrfProtect
 import os
 import pickle
 
-COVERS_FOLDER = Config.COVERS_FOLDER
-
-@main.route('/uploads/<path:filename>')
-def download_file(filename):
-    path = os.path.abspath(COVERS_FOLDER)
-    return send_from_directory(COVERS_FOLDER, filename, as_attachment=True)
 
 @main.route('/', methods=['GET', 'POST'])
 @login_required 
@@ -28,16 +22,12 @@ def index():
 def before_request():
     g.user = current_user
     if g.user.is_authenticated:
-        g.user.last_seen = datetime.utcnow()
-        db.session.add(g.user)
-        db.session.commit()
         g.search_form = SearchForm()
     #g.locale = get_locale()
 
 @main.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
-    print url_for('static', filename="js/vendor/jquery.js")
     form = SearchForm()
     if form.search.data:
         session['query'] = g.search_form.search.data
@@ -66,17 +56,12 @@ def search_results(query):
 @main.route('/rating', methods=['GET', 'POST'])
 @login_required
 def rating():
-    print "rating route accessed"
     data = request.json
     rating = data['rating'][1]
     web_id = data['rating'][0]
-    print 'id:'
-    print web_id
-    print 'rating:'
-    print rating
+
     book = db.session.query(Book).filter(Book.web_id==data['rating'][0]).first()
-    print g.user
-    print book
+
     book_read = Read(user=g.user, book=book, rating=rating)
     db.session.add(book_read)
     db.session.commit()
@@ -87,7 +72,6 @@ def rating():
 @main.route('/library', methods=['GET', 'POST'])
 @login_required
 def library():
-    print 'library route accessed'
     return render_template('library.html', current_user = g.user, db=db, Book=Book)
 
 
@@ -95,12 +79,13 @@ def library():
 @login_required
 def delete_read():
     data = request.json
-    print "data:{}".format(data)
+    #print "data:{}".format(data)
     book_id = data['book_info'][0]
     book = db.session.query(Book).filter(Book.web_id==book_id).first()
     read_record = db.session.query(Read).filter_by(book=book, user_id=current_user.id).first()
-    print read_record
+    #print read_record
     db.session.delete(read_record)
+    db.session.commit()
     book_deleted = {'book deleted': read_record.book_id}
     return jsonify(book_deleted)
 

@@ -459,7 +459,7 @@ class Recommend(object):
         if len(features_list) >= 1:
             top_books_keyword_dict = self.keep_only_if_in_feature_list(top_books_keyword_dict, features_list)
         
-        if len(top_books_keyword_dict) < 7:       
+        if len(top_books_keyword_dict) < 7: 
             collab_filter_results = self.collaborative_filtering_predict(books_selected=books_selected, n_collab_returned=n_collab_returned+n_collab_returned, up_votes=up_votes, down_votes=down_votes)
             ## Run book similarity
             recommended_books = self.apply_book_similarity_filtering(books_selected=books_selected, collab_filter_results=collab_filter_results+top_books_keyword_dict.keys(), features_list=features_list, n_collab_returned=n_collab_returned)
