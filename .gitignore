@@ -3,6 +3,8 @@
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+eb-virt/*
+eb-virt
 
 *.sql
 *.sqlite
