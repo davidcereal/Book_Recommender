@@ -4,7 +4,7 @@ import pickle
 import os
 
 #scriptdir = os.path.dirname(os.path.abspath(__file__))
-scriptdir = 'home/ec2-user/flask_app_data/recommender_data/'
+scriptdir = '/home/ec2-user/flask_app_data/recommender_data/'
 
 book_data_path = os.path.join(scriptdir, "engineered_book_data.pkl")
 #DV_fit_path = os.path.join(scriptdir, "DV_fit.pkl")
