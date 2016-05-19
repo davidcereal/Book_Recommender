@@ -62,6 +62,7 @@ def rating():
     book_read = Read(user=g.user, book=book, rating=rating)
     db.session.add(book_read)
     db.session.commit()
+    print book.title
     book_rating = {"book rated": [book.title]}
     return jsonify(book_rating)
 
