@@ -2,8 +2,8 @@
 import os
 import flask_app
 from flask_app import app
-from app import create_app, db
-from app.models import User, Book, Read, Keyword, Book_keyword
+from flask_app.app import create_app, db
+from flask_app.app.models import User, Book, Read, Keyword, Book_keyword
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 import flask.ext.whooshalchemy
