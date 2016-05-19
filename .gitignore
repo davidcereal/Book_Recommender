@@ -5,6 +5,8 @@
 !.elasticbeanstalk/*.global.yml
 eb-virt/*
 eb-virt
+/eb-virt
+/eb-virt/*
 
 *.sql
 *.sqlite
