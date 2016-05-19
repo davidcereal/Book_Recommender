@@ -211,11 +211,11 @@ function selectFeature(){
           var index = featureSelections.indexOf(oldFeature);
           featureSelections.splice(index, 1)};
       var img = this.parentNode.parentNode.querySelector('.removeFeatureButton')
-      img.src = "{{url_for('static', filename='html_images/thumbs_down_1.jpg')}}"
+      img.src = "{{url_for('static', filename='html_images/remove_button.svg')}}"
       var feature = this.value
       featureSelections.push(feature);
-      upVoted = []
-      downVoted = []
+      upVoted = [];
+      downVoted = [];
       booksReturned = [];
       recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned);
       if (this.id == 'selectedValue') {
@@ -381,6 +381,7 @@ $(document).ready(function ()  {
 
 
 function recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned){
+      alert(booksReturned)
       $.ajaxSetup({
             headers:
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }

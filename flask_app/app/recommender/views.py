@@ -43,6 +43,7 @@ def results():
                                                       down_votes=g.down_voted,
                                                       n_collab_returned=1000)
     rec_data = {"recommendations": g.recommended_books}
+    print 'books returned: {}'.format(g.books_returned)
     return jsonify(rec_data)
 
 # Get user books and features input and return recommendations 
