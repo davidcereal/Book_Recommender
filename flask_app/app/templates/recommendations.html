@@ -211,7 +211,7 @@ function selectFeature(){
           var index = featureSelections.indexOf(oldFeature);
           featureSelections.splice(index, 1)};
       var img = this.parentNode.parentNode.querySelector('.removeFeatureButton')
-      img.src = "static/html_images/remove_button.svg"
+      img.src = "{{url_for('static', filename='html_images/thumbs_down_1.jpg')}}"
       var feature = this.value
       featureSelections.push(feature);
       upVoted = []
