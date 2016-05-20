@@ -59,7 +59,7 @@ def rating():
 
     book = db.session.query(Book).filter(Book.web_id==data['rating'][0]).first()
 
-    book_read = Read(user=g.user.id, book=book, rating=rating)
+    book_read = Read(user=g.user, book=book, rating=rating)
     print 'book read add'
     print book_read
     db.session.add(book_read)
@@ -72,6 +72,7 @@ def rating():
 @main.route('/library', methods=['GET', 'POST'])
 @login_required
 def library():
+    print g.user.books_read
     return render_template('library.html', current_user = g.user, db=db, Book=Book)
 
 
@@ -82,7 +83,7 @@ def delete_read():
     #print "data:{}".format(data)
     book_id = data['book_info'][0]
     book = db.session.query(Book).filter(Book.web_id==book_id).first()
-    read_record = db.session.query(Read).filter_by(book=book, user_id=g.user.id).first()
+    read_record = db.session.query(Read).filter_by(book=book, user=g.user).first()
     print 'read record delete:'
     print read_record
     db.session.delete(read_record)
