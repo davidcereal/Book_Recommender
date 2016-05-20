@@ -20,7 +20,7 @@ DV_fit_path = os.path.join(scriptdir, "dict_vectorizer_fit_160k_top_50k_books_du
 #ipca_model_path = os.path.join(scriptdir, "ipca_model.pkl")
 #ipca_model_path = os.path.join(scriptdir, "ipca_37k_nc150_bs500.pkl")
 #ipca_model_path = os.path.join(scriptdir, "ipca_fillmean_37k_nc100_bs500.pkl")
-ipca_model_path = os.path.join(scriptdir, "ipca_160k_nc50_bs500.pkl")
+ipca_model_path = os.path.join(scriptdir, "ipca_160k_nc162_bs8000_col_mean_then_resid_fill.pkl")
 
 
 
@@ -29,7 +29,7 @@ if Config.LOCAL == False:
 
 	s3.download_file("brstatic", "static/recommender_data/dict_vectorizer_fit_160k_top_50k_books_duplicates_removed_user_data.pkl", DV_fit_path)
 	s3.download_file("brstatic", "static/recommender_data/engineered_book_data.pkl", book_data_path)
-	s3.download_file("brstatic", "static/recommender_data/ipca_160k_nc50_bs500.pkl", ipca_model_path)
+	s3.download_file("brstatic", "static/recommender_data/ipca_160k_nc162_bs8000_col_mean_then_resid_fill.pkl", ipca_model_path)
 
 
 
