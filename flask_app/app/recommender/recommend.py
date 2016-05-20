@@ -491,7 +491,7 @@ class Recommend(object):
             print 'total sum distances: {} '.format(sum_distances)
         
         ## Return the id's for the books and place in a list
-        recommended_books = [books_df.iloc[neighbor].name for neighbor in neighbors if books_df.iloc[neighbor].name not in books_returned]
+        recommended_books = [books_df.iloc[neighbor].name for neighbor in neighbors if books_df.iloc[neighbor].name not in books_returned+books_selected]
 
 
         return recommended_books[:6]
