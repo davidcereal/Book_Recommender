@@ -52,7 +52,7 @@ def results():
                                                       books_returned=g.books_returned,
                                                       up_votes=g.up_voted, 
                                                       down_votes=g.down_voted,
-                                                      n_collab_returned=1000)
+                                                      n_collab_returned=100)
     rec_data = {"recommendations": g.recommended_books}
     return jsonify(rec_data)
 
