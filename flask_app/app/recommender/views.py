@@ -21,11 +21,16 @@ def before_request():
 @recommender.route('/recommendations', methods=['GET', 'POST']) 
 @login_required
 def recommendations():
-    return render_template('recommendations.html', current_user=g.user, db=db, Book=Book)
+    books_read = []
+    for book_read in current_user.books_read:
+        book = db.session.query(Book).filter_by(id=book_read.book_id).first()
+        web_id = book.web_id
+        books_read.append(web_id)
+    return render_template('recommendations.html', current_user=g.user, db=db, Book=Book, books_read=books_read)
 
 @recommender.route('/recommendations/results', methods=['GET', 'POST']) 
 @login_required
-def results():
+def results():    
     g.data = request.json
     g.data = g.data['recommendation_data'][0]
     g.books_selected = g.data['books_selected']
@@ -33,6 +38,12 @@ def results():
     g.up_voted = g.data['up_voted']
     g.down_voted = g.data['down_voted']
     g.books_returned = g.data['books_returned']
+    g.books_read = g.data['books_read'] 
+
+    for book in g.books_read:
+        g.books_returned.append(str(book))
+
+
     g.Recommend = Recommend(user=g.user, db=db, Read=Read, Book=Book,
                             book_data=book_data, ipca_model=ipca_model, 
                             dict_vectorizer_fit=dict_vectorizer_fit)

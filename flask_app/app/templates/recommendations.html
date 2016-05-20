@@ -173,7 +173,7 @@ $(document).ready(function ()  {
         upVoted = [];
         downVoted = [];
         booksReturned = [];
-        recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned)
+        recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead)
       
       }
       else {
@@ -183,7 +183,7 @@ $(document).ready(function ()  {
         downVoted = [];
         booksReturned = [];
 
-        recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned);
+        recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead);
       }   
     });
   });
@@ -217,7 +217,7 @@ function selectFeature(){
       upVoted = [];
       downVoted = [];
       booksReturned = [];
-      recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned);
+      recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead);
       if (this.id == 'selectedValue') {
         nFeatureContainers = nFeatureContainers + 1 ;
         var newColumn = document.createElement('div')
@@ -239,7 +239,7 @@ function selectFeature(){
       upVoted = []
       downVoted = []
       booksReturned = [];
-      recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned);
+      recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead);
       if (($(row).children().length > 1 &&  $(row).children().length > featureSelections.length+1)
           ){
       row.removeChild(column)
@@ -264,7 +264,7 @@ var downVoted = [];
 var bookSelections = [];
 var featureSelections = [];
 var booksReturned = [];
-
+var booksRead = {{ books_read }}
 
 $(document).ready(function ()  {
   $(document).on('click',".upVote", function ()  {
@@ -380,7 +380,7 @@ $(document).ready(function ()  {
 
 
 
-function recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned){
+function recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead){
       $.ajaxSetup({
             headers:
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
@@ -393,7 +393,8 @@ function recommendBooks(bookSelections, featureSelections, upVoted, downVoted, b
          url: "{{ url_for('recommender.results') }}",
          dataType: "json",
          async: true,
-         data: JSON.stringify({"recommendation_data":[{"books_selected": bookSelections, "features_list":featureSelections, "up_voted":upVoted, "down_voted":downVoted, "books_returned":booksReturned}]}),  
+         data: JSON.stringify({"recommendation_data":[{"books_selected": bookSelections, "features_list":featureSelections, "up_voted":upVoted, "down_voted":downVoted, 
+          "books_returned":booksReturned, "books_read":booksRead }]}),  
          success: function (data) {
          console.log('successfully deleted:');
           showResults(data['recommendations']);
@@ -409,7 +410,7 @@ function recommendBooks(bookSelections, featureSelections, upVoted, downVoted, b
 
 function prevClick(){
   booksReturned.splice(booksReturned.length -12, 12)
-  recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned)
+  recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead)
 }
 
 
@@ -441,7 +442,7 @@ function showResults(recommendations){
     'class':'button medium',
     'text':'get more',
     'style':'float:right; font-weight:bold;',
-    'onclick': 'recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned)'
+    'onclick': 'recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead)'
     }).appendTo(nextDiv);
   for (var i = 0; i < 6; i++) {
     webId = recommendations[i];
