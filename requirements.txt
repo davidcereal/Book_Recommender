@@ -35,6 +35,7 @@ numpy==1.11.0
 oauth2==1.9.0.post1
 pandas==0.18.1
 pathspec==0.3.4
+psycopg2==2.6.1
 pycparser==2.14
 python-dateutil==2.5.3
 python-editor==1.0
@@ -42,8 +43,8 @@ python-openid==2.2.5
 pytz==2016.4
 PyYAML==3.11
 requests==2.9.1
-scikit-learn==0.17.1
 scipy==0.17.0
+scikit-learn==0.17.1
 semantic-version==2.5.0
 six==1.10.0
 SQLAlchemy==1.0.12
