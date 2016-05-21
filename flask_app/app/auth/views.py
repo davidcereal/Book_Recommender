@@ -84,7 +84,7 @@ def google_authorized(resp):
     login_user(user, form.remember_me.data)
     flash("You have been logged in.", category="success")
 
-    return redirect(url_for('recommender.recommendations'))
+    return redirect(url_for('main.search'))
 
 
 
@@ -102,7 +102,7 @@ def facebook_login():
     return facebook.authorize(
         callback=url_for(
             '.facebook_authorized',
-            next=url_for('recommender.recommendations'),
+            next=url_for('main.search'),
             _external=True, 
             form=form
         )
@@ -133,7 +133,7 @@ def facebook_authorized(resp):
     login_user(user, form.remember_me.data)
     flash("You have been logged in.", category="success")
 
-    return redirect(url_for('recommender.recommendations'))
+    return redirect(url_for('main.search'))
 
 
 
