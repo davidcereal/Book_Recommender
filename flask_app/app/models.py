@@ -46,7 +46,7 @@ class Book(db.Model):
     title = db.Column(db.String, index=True)
     author = db.Column(db.String, index=True)
     publication_date = db.Column(db.String, index=True)
-    description = db.Column(db.String, index=True)
+    description = db.Column(db.String, index=False)
     users = db.relationship('Read', back_populates='book') 
     keywords = db.relationship('Book_keyword', back_populates='book')
 

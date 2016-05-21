@@ -81,9 +81,22 @@
 <div class="row" id=titleDiv style="padding-left:14px"></div>
 <div class="row" id=authorDiv style="padding-left:14px"></div>
 <div class="row">
-  <div class="medium-6 columns" id="descriptionDiv">
+  <div class="shrink columns" id="book_container" style="margin-right:20px; margin-top:10px;">
+      <div class="row">
+      <img class=modalBookCover id="modalCover">
+      </div>
+      <div class="row">
+      <div class="shrink columns" id="upVoteContainer">
+        <img class="upVoteModal" title="more like this" id=upVoteImg src="{{url_for('static', filename='html_images/thumbs_up_1.jpg')}}">
+      </div>
+      <div class="shrink columns" id="downVoteContainer" style="margin-left:-20px">
+        <img class="downVoteModal" title="less like this" id = downVoteImg src="{{url_for('static', filename='html_images/thumbs_down_1.jpg')}}">
+      </div>
+    </div>
   </div>
-  <div class="medium-6 columns" id="d3_container">
+  <div class="medium-4 columns description" id="descriptionDiv" style="padding-bottom:30px">
+  </div>
+  <div class="medium-4 columns" id="d3_container">
   </div>
 </div>
 </div>
@@ -92,10 +105,10 @@
   <img class="resultCover"/>
   <div class="row" id="votes">
     <div class="small-2 columns" id="upVoteDiv" style="padding-left:55px;">
-      <img class="upVote" src="{{url_for('static', filename='html_images/thumbs_up_1.jpg')}}">
+      <img class="upVote" title="more like this" src="{{url_for('static', filename='html_images/thumbs_up_1.jpg')}}">
     </div>
     <div class="small-2 columns" id="downVoteDiv">
-      <img class="downVote" src="{{url_for('static', filename='html_images/thumbs_down_1.jpg')}}">
+      <img class="downVote" title="less like this" src="{{url_for('static', filename='html_images/thumbs_down_1.jpg')}}">
     </div>
   </div>
 </script>
@@ -141,8 +154,26 @@
 <script>
 
 
+function upVoteFun(upVoteEle, upVoteImg, downVoteEle, downVoteImg){
+  $(upVoteEle).click();
+  upVoteImg.src = upVoteEle.src
+  downVoteImg.src = downVoteEle.src
 
-function insertBookInfo(book_info) {
+
+};
+
+
+function downVoteFun(upVoteEle, upVoteImg, downVoteEle, downVoteImg){
+  $(downVoteEle).click();
+  downVoteImg.src = downVoteEle.src
+  upVoteImg.src = upVoteEle.src
+
+
+
+};
+
+
+function insertBookInfo(book_info, upVoteEle, downVoteEle, imgEle) {
     var title = book_info[0];
     var author = book_info[1];
     var description = book_info[2];
@@ -152,6 +183,8 @@ function insertBookInfo(book_info) {
     titleDiv.innerHTML = ""
     authorDiv.innerHTML = ""
     descriptionDiv.innerHTML = ""
+    var img = document.getElementById("modalCover")
+    img.src = imgEle.src
     var d3_container = document.getElementById("d3_container");
     var titleElem = document.createElement("h2");
     var authorElem = document.createElement("h5");
@@ -162,6 +195,18 @@ function insertBookInfo(book_info) {
     titleDiv.appendChild(titleElem);
     authorDiv.appendChild(authorElem);
     descriptionDiv.appendChild(descElem);
+    var upVoteImg = document.getElementById("upVoteImg");
+    upVoteImg.className='upVoteModal'
+    upVoteImg.src=upVoteEle.src
+    var downVoteImg = document.getElementById("downVoteImg");
+    downVoteImg.className='downVoteModal'
+    downVoteImg.src=downVoteEle.src
+    upVoteImg.onclick = function (){
+      upVoteFun(upVoteEle, upVoteImg, downVoteEle, downVoteImg);
+    };
+    downVoteImg.onclick = function (){
+      downVoteFun(upVoteEle, upVoteImg, downVoteEle, downVoteImg);
+    };
     }
 
 $(document).ready(function ()  {
@@ -199,7 +244,9 @@ function removeFeature(ele){
   select.click()
 
 
-}
+};
+
+
 
 function selectFeature(){
      if(this.id !== this.value){
@@ -327,7 +374,6 @@ $(document).ready(function ()  {
 
 
 
-
 /*(function init() {
 	var lastBookDiv = document.querySelectorAll(['.c-rating']);
 	 	for (var i = 1; i < lastBookDiv.length+1; i++) {
@@ -346,7 +392,7 @@ $(document).ready(function ()  {
 */
 
 <!-- FUNCTION TO DISPLAY FEATURES -->
-     function drawD3(webId){
+     function drawD3(webId, upVoteEle, downVoteEle, imgEle){
       $.ajaxSetup({
             headers:
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
@@ -359,7 +405,7 @@ $(document).ready(function ()  {
          async: true,
          data: JSON.stringify({"book_id": [webId]}),   
          success: function (data) {
-          insertBookInfo(data['book_info'])
+          insertBookInfo(data['book_info'], upVoteEle, downVoteEle, imgEle)
           console.log('test')
           console.log(data);
          var elements = document.getElementsByClassName("node");
@@ -381,6 +427,7 @@ $(document).ready(function ()  {
 
 
 function recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead){
+
       $.ajaxSetup({
             headers:
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
@@ -448,23 +495,26 @@ function showResults(recommendations){
     webId = recommendations[i];
     var result = document.createElement('div');
     result.className="small-2 columns";
+    result.id = recommendations[i]
     var result_content = document.getElementById('resultScript').innerHTML;
     result.innerHTML = result_content;
     var img = result.querySelector('img');
     img.id = recommendations[i];
-    img.onclick = function () {
-      drawD3(this.id);
-      var popup = new Foundation.Reveal($('#bookModal'));
-      popup.open()
-    };
+    
 
     var imgSrc_beg = "{{url_for('static', filename='book_covers/')}}";
     var imgSrc_end = recommendations[i] + '.jpg';
     img.src = imgSrc_beg + imgSrc_end;
-    var upVote = result.querySelector(".upVote");
-    var downVote = result.querySelector(".downVote");
-    upVote.id=recommendations[i];
-    downVote.id=recommendations[i];
+    var upVoteEle = result.querySelector(".upVote");
+    var downVoteEle = result.querySelector(".downVote");
+    upVoteEle.id=recommendations[i];
+    downVoteEle.id=recommendations[i];
+
+    img.onclick = function () {
+      drawD3(this.id, this.parentNode.querySelector(".upVote"), this.parentNode.querySelector(".downVote"), this.parentNode.querySelector('.resultCover')) ;
+      var popup = new Foundation.Reveal($('#bookModal'));
+      popup.open()
+    };
     result_div.appendChild(result);
 
 

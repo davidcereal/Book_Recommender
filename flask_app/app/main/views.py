@@ -58,7 +58,11 @@ def rating():
     web_id = data['rating'][0]
 
     book = db.session.query(Book).filter(Book.web_id==data['rating'][0]).first()
-
+    read_record = db.session.query(Read).filter_by(book=book, user=g.user).first()
+    ## Fix in the future, this is bad:
+    #if read_record != None:
+        #db.session.delete(read_record)
+        #db.session.commit()
     book_read = Read(user=g.user, book=book, rating=rating)
     print 'book read add'
     print book_read
