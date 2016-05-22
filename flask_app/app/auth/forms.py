@@ -72,4 +72,4 @@ class RegistrationForm(Form):
             raise ValidationError('Invalid username/password combination')'''
 
 class SearchForm(Form):
-    search = StringField('search', validators=[DataRequired()])
+    search = StringField('search by title or author', validators=[DataRequired()])

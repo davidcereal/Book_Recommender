@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NextRead</title>
     
+    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{ url_for('static', filename="css/foundation.css") }}">
     <link rel="stylesheet" href="{{ url_for('static', filename="css/app.css") }}">
     <link rel="stylesheet" href="{{ url_for('static', filename="css/styles.css") }}">
@@ -24,8 +25,8 @@
       </div>
     <ul class="menu">
       <li><a href="{{ url_for('main.library') }}">My Library</a></li>
-      <li><a href="{{ url_for('main.search') }}">Add Books</a></li>
-      <li><a href="{{ url_for('recommender.recommendations') }}">Recommendations</a></li>
+      <li><a href="{{ url_for('main.search') }}">Browse for Books</a></li>
+      <li><a href="{{ url_for('recommender.recommendations') }}">Get Recommendations</a></li>
       <li><a href="{{ url_for('main.about') }}">About</a></li>
 
 

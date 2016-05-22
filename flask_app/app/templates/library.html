@@ -5,7 +5,7 @@
 {{ super() }}
   
   <div class="row" style="padding-bottom: 30px; padding-top: 30px">
-  	<h3>Hello {{current_user.first_name}}, welcome to your library!</h3>
+  	<h3>Hello {{current_user.name}}, welcome to your library!</h3>
 <meta name="csrf-token" content="{{ csrf_token() }}">
    </div>
 <div class=row>

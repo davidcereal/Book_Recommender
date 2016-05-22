@@ -4,11 +4,18 @@
 {% block content %}
 {{ super() }}
   
-  <div class="row" style="padding-bottom: 10px; padding-top: 30px">
-  	<h4>Let's find your next book!</h4>
+  <div class="row align-bottom" style="padding-bottom: 10px; padding-top: 30px">
+  	<div class="shrink columns">
+      <h4>Let's find your next book</h4>
+    </div>
+    <div class="shrink columns" style="padding-bottom:7px">
+      <span> Click <a href="{{url_for( 'main.search' )}}">here</a> to add books to your library</span>
+    </div>
+    </div>
+
 <meta name="csrf-token" content="{{ csrf_token() }}">
    </div>
-<div class="row container" style='box-shadow: inset 0 0 10px 1px gray; height: 320px;overflow:scroll; padding: 15px'>
+<div class="row container" style='box-shadow: inset 0 0 5px 1px gray; height: 320px;overflow:scroll; padding: 15px'>
 <div class=row>
   {% set n = 0 %}
   {% for book_read in current_user.books_read %}	

@@ -8,9 +8,13 @@
 {{ super() }}
   
   <div class="row" style="padding-bottom: 30px; padding-top: 30px">
-  	<h3>Search results for "{{ query }}":</h3>
+  	<h5>Search results for "{{ query }}":</h5>
 <meta name="csrf-token" content="{{ csrf_token() }}">
    </div>
+<div class="row" style="margin-top:-30px; margin-bottom:15px">
+Rate books you've read to add them to your library
+</div>
+
 
  <div id="books">
   {% set n = 0 %}
@@ -108,7 +112,7 @@ function deleteReadRecord(book_id, calledBy){
      function addClearRating(bookElem, ratingElement){    	                            
      	var clearRatingElem = document.createElement("p")
      	clearRatingElem.className = 'clearRatingElem';
-     	clearRatingElem.innerHTML = 'Clear Rating';
+     	clearRatingElem.innerHTML = 'Remove from Library';
       var current_rating = bookElem.querySelector('.current_rating_div').id
      	var book_id = bookElem.querySelector('.book_id').id;
      	clearRatingElem.onclick = function () {
