@@ -39,6 +39,11 @@ def results():
     g.down_voted = g.data['down_voted']
     g.books_returned = g.data['books_returned']
     g.books_read = g.data['books_read'] 
+    g.prev_click = g.data['prev_click']
+    g.more_click = g.data['more_click']
+    g.collab_start_point = 0
+    if g.more_click == 'yes':
+        g.collab_start_point = g.data['collab_returned']
 
     for book in g.books_read:
         g.books_returned.append(str(book))
@@ -46,14 +51,15 @@ def results():
 
     g.Recommend = Recommend(user=g.user, db=db, Read=Read, Book=Book,
                             book_data=book_data, ipca_model=ipca_model, 
-                            dict_vectorizer_fit=dict_vectorizer_fit)
+                            dict_vectorizer_fit=dict_vectorizer_fit,
+                            collab_start_point=g.collab_start_point)
     g.recommended_books = g.Recommend.recommend_books(books_selected=g.books_selected, 
                                                       features_list=g.features_list, 
                                                       books_returned=g.books_returned,
                                                       up_votes=g.up_voted, 
                                                       down_votes=g.down_voted,
                                                       n_collab_returned=100)
-    rec_data = {"recommendations": g.recommended_books}
+    rec_data = {"recommendations": g.recommended_books, "collab_returned":g.Recommend.collab_returned}
     return jsonify(rec_data)
 
 # Get user books and features input and return recommendations 

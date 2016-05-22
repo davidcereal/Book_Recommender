@@ -225,7 +225,9 @@ $(document).ready(function ()  {
         upVoted = [];
         downVoted = [];
         booksReturned = [];
-        recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead)
+          var moreClick='no';
+          var prevClick='no';
+        recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead, moreClick, prevClick, collabReturned)
       
       }
       else {
@@ -234,8 +236,9 @@ $(document).ready(function ()  {
         upVoted = [];
         downVoted = [];
         booksReturned = [];
-
-        recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead);
+          var moreClick='no';
+          var prevClick='no';
+        recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead, moreClick, prevClick, collabReturned);
       }   
     });
   });
@@ -272,7 +275,9 @@ function selectFeature(){
       upVoted = [];
       downVoted = [];
       booksReturned = [];
-      recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead);
+      var moreClick='no';
+      var prevClick='no';
+      recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead, moreClick, prevClick, collabReturned);
       if (this.id == 'selectedValue') {
         nFeatureContainers = nFeatureContainers + 1 ;
         var newColumn = document.createElement('div')
@@ -294,7 +299,9 @@ function selectFeature(){
       upVoted = []
       downVoted = []
       booksReturned = [];
-      recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead);
+      var moreClick='no';
+      var prevClick='no';
+      recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead, moreClick, prevClick, collabReturned);
       if (($(row).children().length > 1 &&  $(row).children().length > featureSelections.length+1)
           ){
       row.removeChild(column)
@@ -320,6 +327,7 @@ var bookSelections = [];
 var featureSelections = [];
 var booksReturned = [];
 var booksRead = {{ books_read }}
+
 
 $(document).ready(function ()  {
   $(document).on('click',".upVote", function ()  {
@@ -414,8 +422,6 @@ $(document).ready(function ()  {
          data: JSON.stringify({"book_id": [webId]}),   
          success: function (data) {
           insertBookInfo(data['book_info'], upVoteEle, downVoteEle, imgEle)
-          console.log('test')
-          console.log(data);
          var elements = document.getElementsByClassName("node");
         while (elements[0]) elements[0].parentNode.removeChild(elements[0]);
          circle_plot(data["d3_info"]);
@@ -432,9 +438,9 @@ $(document).ready(function ()  {
        })
      }
 
+var collabReturned = 0
 
-
-function recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead){
+function recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead, moreClick, prevClick, collabReturned){
 
       $.ajaxSetup({
             headers:
@@ -449,23 +455,32 @@ function recommendBooks(bookSelections, featureSelections, upVoted, downVoted, b
          dataType: "json",
          async: true,
          data: JSON.stringify({"recommendation_data":[{"books_selected": bookSelections, "features_list":featureSelections, "up_voted":upVoted, "down_voted":downVoted, 
-          "books_returned":booksReturned, "books_read":booksRead }]}),  
+          "books_returned":booksReturned, "books_read":booksRead , "more_click":moreClick, "prev_click":prevClick, "collab_returned":collabReturned }]}),  
          success: function (data) {
-         console.log('recommend success');
+
+         collabReturnedData = (data['collab_returned'])
           showResults(data['recommendations']);
           for (i = 0; i<6; i++){
             booksReturned.push(data['recommendations'][i])
           };
          },
          error: function (result) {
-         console.log('you messed up')
          }
        })
      };
 
 function prevClick(){
   booksReturned.splice(booksReturned.length -12, 12)
-  recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead)
+  var moreClick='no';
+  var prevClick='yes';
+  recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead, moreClick, prevClick, collabReturned)
+}
+
+function moreClick(){
+  var moreClick='yes';
+  var prevClick='no';
+  var collabReturned = collabReturnedData
+  recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead, moreClick, prevClick, collabReturned)
 }
 
 
@@ -497,7 +512,7 @@ function showResults(recommendations){
     'class':'button medium',
     'text':'get more',
     'style':'float:right; font-weight:bold;',
-    'onclick': 'recommendBooks(bookSelections, featureSelections, upVoted, downVoted, booksReturned, booksRead)'
+    'onclick': 'moreClick()'
     }).appendTo(nextDiv);
   for (var i = 0; i < 6; i++) {
     webId = recommendations[i];

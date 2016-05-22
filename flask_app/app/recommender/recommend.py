@@ -41,7 +41,7 @@ def get_book_info(book_id, book_data):
 
 
 class Recommend(object):
-    def __init__(self, user, Read, Book, book_data, db, ipca_model, dict_vectorizer_fit, return_distances=False):
+    def __init__(self, user, Read, Book, book_data, db, ipca_model, dict_vectorizer_fit, collab_start_point, return_distances=False):
         self.user = user
         self.Read = Read
         self.Book = Book
@@ -50,19 +50,24 @@ class Recommend(object):
         self.ipca_model = ipca_model
         self.dict_vectorizer_fit = dict_vectorizer_fit
         self.return_distances= return_distances
+        self.collab_start_point = collab_start_point
+        self.collab_returned = 0
 
     def recommend_books(self, books_selected, features_list, books_returned, up_votes, down_votes, n_collab_returned):
         """
         Function to run collaborative filtering and book-keyword similarity and return recommendations
         """
         ##" Run collaborative filtering
-        collab_filter_results = self.collaborative_filtering_predict(books_selected=books_selected, up_votes=up_votes, down_votes=down_votes, n_collab_returned=n_collab_returned)
+        collab_filter_results = self.collaborative_filtering_predict(books_selected=books_selected, up_votes=up_votes, 
+                                                                    down_votes=down_votes, n_collab_returned=n_collab_returned)
         """for book in collab_filter_results:
             if book_data[book].has_key('title'):
                 print ' '.join(book_data[book]['title'].split())"""
         ## Run book similarity
         recommended_books = self.apply_book_similarity_filtering(books_selected=books_selected, collab_filter_results=collab_filter_results, 
-            features_list=features_list, n_collab_returned=n_collab_returned, books_returned=books_returned)
+                                                                features_list=features_list, n_collab_returned=n_collab_returned, 
+                                                                books_returned=books_returned, up_votes=up_votes, 
+                                                                down_votes=down_votes)
         return recommended_books
 
     #------------------------------Collaborative Filtering--------------------------#
@@ -142,7 +147,7 @@ class Recommend(object):
                 user_authors_list.append(author)
         return user_authors_list
 
-    def return_top_n_books(self, filled_enduser_ratings, book_names, read_authors_list, n_collab_returned):
+    def return_top_n_books(self, filled_enduser_ratings, book_names, read_authors_list, n_collab_returned, count=1):
         """
         Return the top n number of books from the ipca model results.
 
@@ -159,7 +164,9 @@ class Recommend(object):
         ## Attach book names to the results
         results = sorted(zip(book_names, filled_enduser_ratings), key = lambda x: x[1], reverse=True)
         collab_filter_results = []
-        for item in results[n_collab_returned-n_collab_returned:n_collab_returned]:
+
+        for item in results[self.collab_start_point+ (n_collab_returned-(n_collab_returned/count)):(self.collab_start_point + n_collab_returned)]:
+            self.collab_returned = (self.collab_start_point + n_collab_returned)
             book_id = item[0]
             if self.book_data.has_key(book_id):
                 if self.book_data[book_id].has_key('author'):
@@ -169,7 +176,7 @@ class Recommend(object):
 
 
 
-    def collaborative_filtering_predict(self, books_selected, n_collab_returned, up_votes, down_votes):
+    def collaborative_filtering_predict(self, books_selected, n_collab_returned, up_votes, down_votes, count=1):
         """
         With enduser input of books and ratings, predict ratings for unread books and
         return highest predicted books.
@@ -201,7 +208,7 @@ class Recommend(object):
         
         ## Return the books the end-user is most likely to rate highest
         collab_filter_results = self.return_top_n_books(filled_enduser_ratings=filled_enduser_ratings, book_names=book_names, 
-                                                        read_authors_list=user_authors_list, n_collab_returned=n_collab_returned)
+                                                        read_authors_list=user_authors_list, n_collab_returned=n_collab_returned, count=count)
         return collab_filter_results
 
     
@@ -347,14 +354,19 @@ class Recommend(object):
             user_preference['user'][feature] = 20
         return user_preference
 
-    def make_top_books_keyword_dict(self, collab_filter_results):
+    def make_top_books_keyword_dict(self, collab_filter_results, books_returned, leftover_collab_results=[]):
         '''
+        Arguments:
+        collab_filter_results(list): results from collab filtering
+        leftover_collab_results = results that were not previously not returned because there were less than 7 of them. 
+
         Turns list of top book_ids returned from ipca and creates a dictionary where:
         {book:{keyword:rank}}
         '''
         top_books_keyword_dict = {}
-        for book_id in collab_filter_results:
-            if self.book_data[book_id].has_key('keywords'):
+  
+        for book_id in collab_filter_results+leftover_collab_results:
+            if self.book_data[book_id].has_key('keywords') and book_id not in books_returned:
                 keywords = self.book_data[book_id]['keywords']
                 top_books_keyword_dict[book_id] = keywords
         return top_books_keyword_dict
@@ -422,7 +434,7 @@ class Recommend(object):
 
 
     def apply_book_similarity_filtering(self, books_selected, collab_filter_results, 
-                                        features_list, n_collab_returned, books_returned ):
+                                        features_list, n_collab_returned, books_returned, up_votes, down_votes, leftover_collab_results=[], count=1):
         """
         Function to take end-user submitted books, find the keywords that are shared
         most among them, and are highest ranked, to determine end-user's preference.
@@ -451,7 +463,9 @@ class Recommend(object):
 
 
         ## Make a dict of keywords for top books and n times keyword mentioned
-        top_books_keyword_dict = self.make_top_books_keyword_dict(collab_filter_results)
+        top_books_keyword_dict = self.make_top_books_keyword_dict(collab_filter_results=collab_filter_results, 
+                                                                  leftover_collab_results=leftover_collab_results, 
+                                                                  books_returned=books_returned)
         
 
         
@@ -460,9 +474,27 @@ class Recommend(object):
             top_books_keyword_dict = self.keep_only_if_in_feature_list(top_books_keyword_dict, features_list)
         
         if len(top_books_keyword_dict) < 7: 
-            collab_filter_results = self.collaborative_filtering_predict(books_selected=books_selected, n_collab_returned=n_collab_returned+n_collab_returned, up_votes=up_votes, down_votes=down_votes)
+            count += 1
+            if count == 40:
+                return None
+            collab_filter_results = self.collaborative_filtering_predict(books_selected=books_selected, n_collab_returned=n_collab_returned+(n_collab_returned/(count-1)), 
+                                                                            up_votes=up_votes, down_votes=down_votes, count=count)
             ## Run book similarity
-            recommended_books = self.apply_book_similarity_filtering(books_selected=books_selected, collab_filter_results=collab_filter_results+top_books_keyword_dict.keys(), features_list=features_list, n_collab_returned=n_collab_returned)
+            #print 'len top_keywords: {}'.format(len(top_books_keyword_dict))
+            if len(top_books_keyword_dict) != 0:
+                leftover_collab_results = top_books_keyword_dict.keys()
+            else: 
+                leftover_collab_results = []
+
+            recommended_books = self.apply_book_similarity_filtering(books_selected=books_selected, 
+                                                                    collab_filter_results=collab_filter_results, 
+                                                                    features_list=features_list, n_collab_returned=n_collab_returned+(n_collab_returned/(count-1)), 
+                                                                    leftover_collab_results=leftover_collab_results,
+                                                                    up_votes=up_votes,
+                                                                    down_votes=down_votes,
+                                                                    books_returned=books_returned,
+                                                                    count =count)
+
             return recommended_books
 
         ## Create dataframe of all books and their keyword rankings as columns
