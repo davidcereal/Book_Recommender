@@ -104,7 +104,7 @@
 <script id="resultScript">
   <img class="resultCover"/>
   <div class="row" id="votes">
-    <div class="shrink columns" id="upVoteDiv" style="margin-left:40px">
+    <div class="shrink columns" id="upVoteDiv" style="margin-left:37px">
       <img class="upVote" title="more like this" src="{{url_for('static', filename='html_images/thumbs_up_1.jpg')}}">
     </div>
     <div class="shrink columns" id="downVoteDiv" style="margin-left:-23px">
@@ -234,7 +234,6 @@ $(document).ready(function ()  {
   });
 
 function removeFeature(ele){
-  alert('remove feature called')
   var select = ele.parentNode.querySelector(".featureSelect")
   // Change selected option
   $(select).val('blank');
@@ -250,7 +249,6 @@ function removeFeature(ele){
 
 
 function selectFeature(){
-  alert('selectFeature called')
      if(this.id !== this.value){
      var column = this.parentNode.parentNode.parentNode
      var row = column.parentNode
