@@ -8,14 +8,14 @@
   	<div class="shrink columns">
       <h4>Let's find your next book</h4>
     </div>
-    <div class="shrink columns" style="padding-bottom:7px">
-      <span> Click <a href="{{url_for( 'main.search' )}}">here</a> to add books to your library</span>
+    <div class="shrink columns " style="padding-bottom:6px">
+      <span>Empty library? <a href="{{url_for( 'main.search' )}}">Add books</a> you've read</span>
     </div>
     </div>
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
    </div>
-<div class="row container" style='box-shadow: inset 0 0 5px 1px gray; height: 320px;overflow:auto; padding: 15px'>
+<div class="row container" style='box-shadow: inset 0 0 5px 1px gray; max-height: 280px; width: 950px; overflow:auto; padding: 15px;'>
 <div class=row>
   {% set n = 0 %}
   {% for book_read in current_user.books_read %}	

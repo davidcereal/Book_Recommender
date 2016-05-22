@@ -14,6 +14,8 @@ eb-virt
 .DS_Store?
 *.pyc
 *.pkl
+*.pkl.*
+
 /test
 /test/
 test/*
