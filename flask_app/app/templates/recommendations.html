@@ -15,7 +15,7 @@
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
    </div>
-<div class="row container" style='box-shadow: inset 0 0 5px 1px gray; height: 320px;overflow:scroll; padding: 15px'>
+<div class="row container" style='box-shadow: inset 0 0 5px 1px gray; height: 320px;overflow:auto; padding: 15px'>
 <div class=row>
   {% set n = 0 %}
   {% for book_read in current_user.books_read %}	
