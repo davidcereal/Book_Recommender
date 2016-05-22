@@ -104,10 +104,10 @@
 <script id="resultScript">
   <img class="resultCover"/>
   <div class="row" id="votes">
-    <div class="small-2 columns" id="upVoteDiv" style="padding-left:55px;">
+    <div class="shrink columns" id="upVoteDiv" style="margin-left:40px">
       <img class="upVote" title="more like this" src="{{url_for('static', filename='html_images/thumbs_up_1.jpg')}}">
     </div>
-    <div class="small-2 columns" id="downVoteDiv">
+    <div class="shrink columns" id="downVoteDiv" style="margin-left:-23px">
       <img class="downVote" title="less like this" src="{{url_for('static', filename='html_images/thumbs_down_1.jpg')}}">
     </div>
   </div>
@@ -234,6 +234,7 @@ $(document).ready(function ()  {
   });
 
 function removeFeature(ele){
+  alert('remove feature called')
   var select = ele.parentNode.querySelector(".featureSelect")
   // Change selected option
   $(select).val('blank');
@@ -249,6 +250,7 @@ function removeFeature(ele){
 
 
 function selectFeature(){
+  alert('selectFeature called')
      if(this.id !== this.value){
      var column = this.parentNode.parentNode.parentNode
      var row = column.parentNode
@@ -507,8 +509,8 @@ function showResults(recommendations){
     img.src = imgSrc_beg + imgSrc_end;
     var upVoteEle = result.querySelector(".upVote");
     var downVoteEle = result.querySelector(".downVote");
-    upVoteEle.id=recommendations[i];
-    downVoteEle.id=recommendations[i];
+    //upVoteEle.id=recommendations[i];
+    //downVoteEle.id=recommendations[i];
 
     img.onclick = function () {
       drawD3(this.id, this.parentNode.querySelector(".upVote"), this.parentNode.querySelector(".downVote"), this.parentNode.querySelector('.resultCover')) ;
