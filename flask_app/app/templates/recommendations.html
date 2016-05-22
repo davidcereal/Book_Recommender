@@ -256,6 +256,7 @@ function removeFeature(ele){
 
 
 function selectFeature(){
+  console.log('functoin called!')
      if(this.id !== this.value){
      var column = this.parentNode.parentNode.parentNode
      var row = column.parentNode
@@ -304,7 +305,7 @@ function selectFeature(){
 };
 
 $(document).ready(function ()  {
-    $(".featureSelect").on("click", function () {
+    $(document).on("change", "select", function () {
       selectFeature.call(this);
       
     });
@@ -450,7 +451,7 @@ function recommendBooks(bookSelections, featureSelections, upVoted, downVoted, b
          data: JSON.stringify({"recommendation_data":[{"books_selected": bookSelections, "features_list":featureSelections, "up_voted":upVoted, "down_voted":downVoted, 
           "books_returned":booksReturned, "books_read":booksRead }]}),  
          success: function (data) {
-         console.log('successfully deleted:');
+         console.log('recommend success');
           showResults(data['recommendations']);
           for (i = 0; i<6; i++){
             booksReturned.push(data['recommendations'][i])
