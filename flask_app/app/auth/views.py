@@ -158,7 +158,7 @@ def login():
             login_user(user, form.remember_me.data)
             #return redirect(request.args.get('next') 
             flash("You have been logged in.", category="success")
-            return redirect(url_for('recommender.recommendations'))
+            return redirect(url_for('main.search'))
         flash('Invalid username or password.')
 
     openid_errors = oid.fetch_error()

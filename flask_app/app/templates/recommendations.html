@@ -4,6 +4,7 @@
 {% block content %}
 {{ super() }}
   
+  
   <div class="row align-bottom" style="padding-bottom: 10px; padding-top: 30px">
   	<div class="shrink columns">
       <h4>Let's find your next book</h4>
@@ -13,10 +14,32 @@
     </div>
     </div>
 
+
+ {% if books_read|length == 0 %}
+<div class="alert callout" data-closable style=" max-width: 62.5rem; margin-left:auto; margin-right: auto;">
+  <div class="row">
+    <h5>To get book recommendations, you need books in your library!</h5>
+  </div>
+    <div class="row">
+  <p>Click <a href={{url_for('main.search')}}>here</a> to browse books and add them to your library</p>
+  </div>
+  <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+
+
+
+
+
+
 <meta name="csrf-token" content="{{ csrf_token() }}">
    </div>
-<div class="row container" style='box-shadow: inset 0 0 5px 1px gray; max-height: 280px; width: 950px; overflow:auto; padding: 15px;'>
+<div class="row container" style='box-shadow: inset 0 0 5px 1px gray; height: 280px; width: 950px; overflow:auto; padding: 15px;'>
 <div class=row>
+
+
   {% set n = 0 %}
   {% for book_read in current_user.books_read %}	
   {% set n = n+1 %}
@@ -25,6 +48,7 @@
       {% include 'recommendations_book.html' %} 
   	{% endwith %}
  	{% endfor %}
+
  </div>
  </div>
 
@@ -178,7 +202,6 @@ function downVoteFun(upVoteEle, upVoteImg, downVoteEle, downVoteImg){
 
 
 };
-
 
 function insertBookInfo(book_info, upVoteEle, downVoteEle, imgEle) {
     var title = book_info[0];
