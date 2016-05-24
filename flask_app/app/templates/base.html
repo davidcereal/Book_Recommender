@@ -24,10 +24,10 @@
         <h1>NextRead</h1>
       </div>
     <ul class="menu">
-      <li><a href="{{ url_for('main.library') }}">My Library</a></li>
       <li><a href="{{ url_for('main.search') }}">Browse for Books</a></li>
       <li><a href="{{ url_for('recommender.recommendations') }}">Get Recommendations</a></li>
-      <li><a href="{{ url_for('main.about') }}">About</a></li>
+      <li><a href="{{ url_for('main.library') }}">My Library</a></li>
+
 
 
       {% if current_user.is_authenticated %}

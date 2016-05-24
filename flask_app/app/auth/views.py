@@ -193,8 +193,9 @@ def register():
                     password = form.password1.data)
         db.session.add(user)
         db.session.commit()
+        login_user(user)
         flash('You can now login')
-        return redirect(url_for('recommender.recommendations'))
+        return redirect(url_for('main.search'))
     openid_errors = oid.fetch_error()
     if openid_errors:
         flash(openid_errors, category="danger")

@@ -11,8 +11,16 @@
 </div>
 
 <div class="row" >
-	<form action="{{ url_for('main.search') }}" method="post" name="search" >{{ g.search_form.hidden_tag() }}{{ g.search_form.search(size=40, placeholder='search by title or author') }}
-	<input type="submit" value="Search" class=button ></form>
+	<form class="row" action="{{ url_for('main.search') }}" method="post" name="search" >
+		<div class="shrink columns">
+			{{ g.search_form.hidden_tag() }}{{ g.search_form.search(size=40, placeholder='enter title or author') }}
+		</div>
+		<div class="shrink columns" style="margin-left:-20px">
+			<input type="submit" value="Search" class=button>
+		</div>
+
+	</form>
+
 	<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
 </div>

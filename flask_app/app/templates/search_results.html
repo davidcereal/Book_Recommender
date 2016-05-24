@@ -10,13 +10,13 @@
 {% if results|length == 0 %}
 <div class="alert callout" data-closable style=" max-width: 1000px; margin-left:auto; margin-right: auto;">
   <div class="row">
-    <h5>Whoops, we couldn't find any results for your search. </h5>
+    <h5>Whoops! We couldn't find any results for your search. </h5>
   </div>
     <div class="row">
       <p>If you searched by title, try searching by author.</p>
   </div>
   <div class="row">
-      <p>You can also combine author and title ex: <i>"Harry Potter Rowling"</i></p>
+      <p>You can also combine author and title. For example: <i>"Harry Potter Rowling"</i></p>
   </div>
   <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
     <span aria-hidden="true">&times;</span>
@@ -26,11 +26,11 @@
 
   
   <div class="row" style="padding-bottom: 30px; padding-top: 30px">
-  	<h5>Search results for "{{ query }}":</h5>
+  	<h5>Search results for <i>"{{ query }}"</i>:</h5>
 <meta name="csrf-token" content="{{ csrf_token() }}">
    </div>
 <div class="row" style="margin-top:-30px; margin-bottom:15px">
-Rate books you've read to add them to your library
+<p style="font-size:16px;">Rate books you've read to add them to your library<p>
 </div>
 
 
