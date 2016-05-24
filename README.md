@@ -70,7 +70,7 @@ This app utilizes 3 blueprints created upon instantiation:
 * auth - handles views of the site relevant to registartion and login
 * recommender - handles views relevant to generating recommendations
 
-### Storage
+### Static and Large Files
 
 Because of Elastic Beanstalk's upload limit of 512mb, the static files and the recommendation models are accessed by connecting to an S3 bucket. 
 
