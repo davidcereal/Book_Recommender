@@ -9,23 +9,18 @@
   	<div class="shrink columns">
       <h4>Let's find your next book</h4>
     </div>
-    <div class="shrink columns " style="padding-bottom:6px">
-      <span>Empty library? <a href="{{url_for( 'main.search' )}}">Add books</a> you've read</span>
-    </div>
     </div>
 
 
  {% if books_read|length == 0 %}
-<div class="alert callout" data-closable style=" max-width: 62.5rem; margin-left:auto; margin-right: auto;">
+<div class="alert callout" data-closable style=" max-width: 950px; margin-left:auto; margin-right: auto;">
   <div class="row">
-    <h5>To get book recommendations, you need books in your library!</h5>
+    <h5>You need books in your library to get recommendations!</h5>
   </div>
     <div class="row">
   <p>Click <a href={{url_for('main.search')}}>here</a> to browse books and add them to your library</p>
   </div>
-  <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
-    <span aria-hidden="true">&times;</span>
-  </button>
+  
 </div>
 {% endif %}
 
