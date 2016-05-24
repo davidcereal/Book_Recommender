@@ -70,9 +70,13 @@ This app utilizes 3 blueprints created upon instantiation:
 * auth - handles views of the site relevant to registartion and login
 * recommender - handles views relevant to generating recommendations
 
+### Storage
+
+Because of Elastic Beanstalk's upload limit of 512mb, the static files and the recommendation models are accessed by connecting to an S3 bucket. 
+
 ### SQL
 
-* The default configuration of the app is to use SQLite, but my altering the config file, it can easily be altered
+* The database for the website is stored on an Amazon RDS server implementing PostgreSQL 
 * In-app interaction between the views of the app and the database is fascilitated by SQLAlchemy
 * Miigration managent is fascilitated by Alembic, designed for use with SQLAchemy 
 
