@@ -76,8 +76,7 @@ Because of Elastic Beanstalk's upload limit of 512mb, the static files and the r
 ### SQL
 
 * The database for the website is stored on an Amazon RDS server implementing PostgreSQL 
-* In-app interaction between the views of the app and the database is fascilitated by SQLAlchemy
-* Miigration managent is fascilitated by Alembic, designed for use with SQLAchemy 
+
 
 
 
