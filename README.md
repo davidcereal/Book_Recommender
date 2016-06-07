@@ -5,22 +5,6 @@ NextReads is a web-app that allows users to get recommendations by mixing and ma
 The app's recommendations are delivered on a basis of collaborative and content-based filtering. To achieve the collaborative filtering, the ratings for 160,000 users and 50,000 books were processed using an SVD to extract the latent features. The recommendations are further filtered by mapping the keywords users associated a book using a KNeighbors model to determine distance from the user's input. Lastly, books that are very popular among all users are penalized, allowing for greater specificity in the results. Users are given the option of up-voting and down-voting the suggestions, and this feedback updates the collaborative filtering output. 
 
 
-## Clone the repository
-
-```$ git clone https://github.com/dberger1989/Book_Recommender.git```
-
-## Setup
-
-This code is portable across the following OS's: Linux distributions, Mac and Windows OS's. Scripts were written using Python 2.7 and have not been tested for portability to Python 3.X.
-
-You are encouraged to use a python virtual environment using virtualenv and pip. 
-
-```$ virtualenv venv```
-
-### Install requirements:
-
-```$ pip install -r requirements.txt```
-
 #### Description of modules imported and application
 
 
@@ -62,6 +46,9 @@ You are encouraged to use a python virtual environment using virtualenv and pip.
 
 ## App structure
 
+### Hosting
+This app is hosted using AWS Elastic Beanstalk. 
+
 ### Blueprints
 
 This app utilizes 3 blueprints created upon instantiation:
@@ -75,7 +62,7 @@ Because of Elastic Beanstalk's upload limit of 512mb, the static files and the r
 
 ### SQL
 
-* The database for the website is stored on an Amazon RDS server implementing PostgreSQL 
+The database for the website is stored on an Amazon RDS server implementing PostgreSQL 
 
 
 
