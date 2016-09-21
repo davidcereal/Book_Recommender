@@ -1,4 +1,5 @@
-(OUTDATED)
+# *****THIS REPO IS OUTDATED*****
+
 # NextReads Book Recommender Web-App Overview
 NextReads is a web-app that allows users to get recommendations by mixing and matching books they have read, as well as specific genres and topics. Most book recommenders suggest books based on your whole library, or all the books of a specific genre, when most of the time, genres are simply too broad of a category. By allowing users to choose the specific books off which to base the recommendation, they can adjust their results in real time. Lastly, allowing users to up-vote and down-vote recommendations will add supervision to the learning, and impprove their recommendations in real time.
 
